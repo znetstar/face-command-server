@@ -1,0 +1,30 @@
+{
+  "name": "face-commmand-server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "lib/index.js",
+  "scripts": {
+    "test": "mocha test",
+    "docs": "grunt docs",
+    "build": "grunt ts",
+    "prepublish": "npm run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/znetstar/face-command-server.git"
+  },
+  "author": "Zachary Boyd <zachary@zacharyboyd.nyc>",
+  "license": "AGPL-3.0-or-later",
+  "bugs": {
+    "url": "https://github.com/znetstar/face-command-server/issues"
+  },
+  "homepage": "https://github.com/znetstar/face-command-server#readme",
+  "devDependencies": {
+    "grunt": "^1.0.3",
+    "grunt-ts": "^6.0.0-beta.21",
+    "grunt-typedoc": "^0.2.4",
+    "mocha": "^5.2.0",
+    "typedoc": "^0.12.0",
+    "typescript": "^3.0.3"
+  }
+}
