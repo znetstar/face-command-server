@@ -2,7 +2,8 @@
     "compilerOptions": {
         "module": "commonjs",
         "noImplicitAny": true,
-        "removeComments": true,
+        "declaration": true,
+        "removeComments": false,
         "preserveConstEnums": true,
         "sourceMap": true,
         "target": "es2018",
@@ -10,6 +11,7 @@
         "outDir": "lib"
     },
     "files": [
-        ""
+        "src/DetectionService.ts",
+        "src/FaceManagementService.ts"
     ]
 }
