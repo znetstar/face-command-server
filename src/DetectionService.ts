@@ -99,7 +99,6 @@ export default class DetectionService extends DetectionServiceBase {
 
             logger.verbose("Grabbing frame from capture source");
             const frame = await this.capture.ImageFromCamera(nconf.get("captureDevicePort"));
-            require('fs').writeFileSync("/Users/zachary/t.webp", frame)
             logger.debug("Detecting faces in image");
             const facesDetected = await this.capture.FacesFromImage(frame);
 

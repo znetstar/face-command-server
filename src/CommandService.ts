@@ -1,8 +1,8 @@
 import * as msgpack from "msgpack-lite";
-import { RunConditionType, Status, Command, CommandServiceBase, CommandTypeBase, RunCondition, Face, FaceManagementServiceBase, StatusType } from "face-command-common";
+import { uniq } from "lodash";
+import { RunConditionType, Status, Command, CommandServiceBase, CommandTypeBase, RunCondition, Face, FaceManagementServiceBase, StatusType, CommandOptions } from "face-command-common";
 import AppResources from "./AppResources";
 import DetectionService from "./DetectionService";
-import FaceManagementService from "./FaceManagementService";
 import DatabaseModels from "./DatabaseModels";
 
 
@@ -158,11 +158,21 @@ export default class CommandService extends CommandServiceBase {
     }
 
     public async RunCommand(command: Command, status: Status): Promise<any> {
-        
+        const { logger } = this.resources;
+        try {
+            const options = new CommandOptions(status, command.data);
+            const type = new (command.type)();
+
+            type.Run(options);
+
+            logger.info(`Successfully ran command ${command.id}`);
+        } catch (error) {
+            logger.error(`Error running ${command.id}: ${error.message}`);
+        }
     }
 
     public async OnStatusChange(status: Status): Promise<void> {
-        const { database } = this.resources;
+        const { database, logger } = this.resources;
 
         let conditionType: Array<number> = [];
 
@@ -189,8 +199,22 @@ export default class CommandService extends CommandServiceBase {
 
         const runConditions = await Promise.all(dbRunConditions.map(DatabaseModels.FromDBRunCondition));
 
+        const ranCommand: any = {};
+
         for (const runCondition of runConditions) {
-            
+            if (runCondition.runConditionType === +RunConditionType.RunOnSpecificFacesRecognized || runCondition.runConditionType === +RunConditionType.RunOnSpecificFacesNoLongerRecognized) {
+                const faceMatch = Boolean(runCondition.facesToRecognize.filter((f1) => status.recognizedFaces.some((f2) => f1.id === f2.id)).length);
+                if (!faceMatch) continue;
+            }
+
+            if (ranCommand[runCondition.commandId]) 
+                continue;
+
+            const dbCommand = await database.Command.findById(runCondition.commandId);
+            const command = await DatabaseModels.FromDBCommand(dbCommand, this.resources);
+
+            ranCommand[command.id] = true;
+            await this.RunCommand(command, status);
         }
     }
 }

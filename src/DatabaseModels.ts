@@ -18,7 +18,8 @@ export default class DatabaseModels {
 
     public static async FromDBRunCondition(dbRunCondition: any): Promise<RunCondition> {
         const dbFaces = await dbRunCondition.getFaces();
-        const runCondition = new RunCondition(dbRunCondition.RunConditionType, (await Promise.all<Face>(dbFaces.map(DatabaseModels.FromDBFace))), dbRunCondition.ID);
+        const runCondition = new RunCondition(dbRunCondition.runConditionType, (await Promise.all<Face>(dbFaces.map(DatabaseModels.FromDBFace))), dbRunCondition.id);
+        runCondition.commandId = dbRunCondition.commandId;
         return runCondition;
     }
 
@@ -34,7 +35,9 @@ export default class DatabaseModels {
     public static async FromDBCommand(dbCommand: any, resources: AppResources): Promise<Command> {
         const dbConditions = await dbCommand.getRunConditions();
         const conditions = await Promise.all<RunCondition>(dbConditions.map(DatabaseModels.FromDBRunCondition));
-        const commandType = CommandService.prototype.CommandTypeFromName.call({ resources }, dbCommand.type);
+        const commandType = CommandService.prototype.CommandTypeFromName.call({ 
+            GetCommandTypes: CommandService.prototype.GetCommandTypes.bind({ resources })
+        }, dbCommand.type);
         let data: any;
 
         if (dbCommand.data) {
