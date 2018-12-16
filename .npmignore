@@ -5,3 +5,4 @@ docs
 .docs
 src
 face-command.sqlite
+.DS_Store

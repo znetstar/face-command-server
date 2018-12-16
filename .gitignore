@@ -3,3 +3,4 @@ lib
 .tscache
 .vscode
 face-command.sqlite
+.DS_Store
