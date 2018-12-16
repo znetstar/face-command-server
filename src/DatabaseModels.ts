@@ -1,59 +1,96 @@
 
 import * as Sequelize from "sequelize";
+import { Face, Command, Status, RunCondition } from "face-command-common";
 import { INTEGER, STRING, BLOB, BOOLEAN, SMALLINT, TIME, Sequelize as ISequelize } from "sequelize";
+import * as msgpack from "msgpack-lite";
+import { default as AppResources } from "./AppResources";
+import { default as CommandService } from "./CommandService";
 
 export default class DatabaseModels {
-    private face: Sequelize.Model<any, any>;
-    private status: Sequelize.Model<any, any>;
-    private command: Sequelize.Model<any, any>;
-    private runCondition: Sequelize.Model<any, any>;
-
-    public get Face(): Sequelize.Model<any, any> { return this.face; }
-    public get Status(): Sequelize.Model<any, any> { return this.status; }
-    public get Command(): Sequelize.Model<any, any> { return this.command; }
-    public get RunCondition(): Sequelize.Model<any, any> { return this.runCondition; }
-    public get Sequelize(): ISequelize { return this.sequelize; }
+    public Face: Sequelize.Model<any, any>;
+    public Status: Sequelize.Model<any, any>;
+    public Command: Sequelize.Model<any, any>;
+    public RunCondition: Sequelize.Model<any, any>;
 
     constructor(private sequelize: ISequelize) {
         
     }
 
+    public static async FromDBRunCondition(dbRunCondition: any): Promise<RunCondition> {
+        const dbFaces = await dbRunCondition.getFaces();
+        const runCondition = new RunCondition(dbRunCondition.RunConditionType, (await Promise.all<Face>(dbFaces.map(DatabaseModels.FromDBFace))), dbRunCondition.ID);
+        return runCondition;
+    }
+
+    public static async FromDBFace(dbFace: any): Promise<Face> {
+        return new Face(dbFace.id, dbFace.name, dbFace.image, dbFace.autostart)
+    }
+
+    public static async FromDBStatus(dbStatus: any): Promise<Status> {
+        const dbFaces = await dbStatus.getFaces();
+        return new Status(dbStatus.id, dbStatus.statusType, dbStatus.time, (await Promise.all<Face>(dbFaces.map(DatabaseModels.FromDBFace))));
+    }
+
+    public static async FromDBCommand(dbCommand: any, resources: AppResources): Promise<Command> {
+        const dbConditions = await dbCommand.getRunConditions();
+        const conditions = await Promise.all<RunCondition>(dbConditions.map(DatabaseModels.FromDBRunCondition));
+        const commandType = CommandService.prototype.CommandTypeFromName.call({ resources }, dbCommand.type);
+        let data: any;
+
+        if (dbCommand.data) {
+            data = msgpack.decode(dbCommand.data);
+        }
+        
+        return new Command(dbCommand.id, dbCommand.name, commandType, conditions, data);
+    }   
+
     public async create(): Promise<any> {
-        this.face = this.sequelize.define("Face", {
-            ID: { type: INTEGER, primaryKey: true, autoIncrement: true },
-            Name: { type: STRING, unique: true },
-            Image: { type: BLOB },
+        this.Face = this.sequelize.define("Face", {
+            id: { type: INTEGER, primaryKey: true, autoIncrement: true },
+            name: { type: STRING, unique: true },
+            image: { type: BLOB },
             autostart: { type: BOOLEAN, defaultValue: false }
         });
     
-        this.status = this.sequelize.define("Status", {
-            ID: { type: INTEGER, primaryKey: true, autoIncrement: true },
-            StatusType: { type: SMALLINT  },
-            Time: { type: TIME }
+        this.Status = this.sequelize.define("Status", {
+            id: { type: INTEGER, primaryKey: true, autoIncrement: true },
+            statusType: { type: SMALLINT  },
+            time: { type: TIME }
         });
     
-        this.command = this.sequelize.define("Command", {
-            ID: { type: INTEGER, primaryKey: true, autoIncrement: true },
-            Name: { type: STRING,  unique: true },
-            Type: { type: STRING },
-            Data: { type: BLOB }
+        this.Command = this.sequelize.define("Command", {
+            id: { type: INTEGER, primaryKey: true, autoIncrement: true },
+            name: { type: STRING,  unique: true },
+            type: { type: STRING },
+            data: { type: BLOB }
         });
     
-        this.runCondition = this.sequelize.define("RunCondition", {
-            ID: { type: INTEGER, primaryKey: true, autoIncrement: true },
-            RunConditionType: { type: SMALLINT }
+        this.RunCondition = this.sequelize.define("RunCondition", {
+            id: { type: INTEGER, primaryKey: true, autoIncrement: true },
+            runConditionType: { type: SMALLINT }
         });
     
-        this.command.hasMany(this.runCondition);
-        this.runCondition.hasMany(this.face);
-        this.status.hasMany(this.face);
-        this.face.belongsTo(this.status);
-        this.face.belongsTo(this.runCondition);
-        this.runCondition.belongsTo(this.command);
+        const RunConditionFacesRecognized = this.sequelize.define('RunCondition_Face', {
+            id: { type: INTEGER, primaryKey: true, autoIncrement: true },
+            faceId: { type: INTEGER },
+            runConditionId: { type: INTEGER }
+        });
+
+        const StatusFacesRecognized = this.sequelize.define('Status_Face', {
+            id: { type: INTEGER, primaryKey: true, autoIncrement: true },
+            faceId: { type: INTEGER },
+            statusId: { type: INTEGER }
+        });
+
+        this.Command.hasMany(this.RunCondition, { foreignKey: 'commandId' });
+        this.RunCondition.belongsToMany(this.Face, { through: "RunCondition_Face", foreignKey: 'runConditionId', otherKey: 'faceId' });
+        this.Status.belongsToMany(this.Face, { through: "Status_Face", foreignKey: 'statusId', otherKey: 'faceId' });
         
-        await this.face.sync();
-        await this.status.sync();
-        await this.command.sync();
-        await this.runCondition.sync();
+        await RunConditionFacesRecognized.sync();
+        await StatusFacesRecognized.sync();
+        await this.Face.sync();
+        await this.Status.sync();
+        await this.Command.sync();
+        await this.RunCondition.sync();
     }
 }

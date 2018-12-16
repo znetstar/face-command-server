@@ -1,6 +1,9 @@
+import { Server as HTTPServer } from "http";
 import { Provider } from "nconf";
 import * as winston from "winston";
 import { Logger as ILogger } from "winston";
+import { Server as RPCServer } from "multi-rpc";
+import { IAppResources } from "face-command-common";
 import DatabaseModels from "./DatabaseModels";
 
 /**
@@ -13,20 +16,7 @@ export { WinstonSilentLogger };
 /**
  * This object contains the common resources (database, logger, etc) used by the application.
  */
-export default class AppResources {
-    /**
-     * The Nconf.Provider instance that contains application configuration.
-     */
-    public get Nconf(): Provider { return this.nconf; }
-    /**
-     * The Sequelize instance for the application.
-     */
-    public get Database(): DatabaseModels { return this.database; }
-    /**
-     * The Winston.Logger instance for the application.
-     */
-    public get Logger(): ILogger { return this.logger; }
-
+export default class AppResources implements IAppResources {
     /**
      * Creates an AppResources object.
      * 
@@ -35,6 +25,6 @@ export default class AppResources {
      * @param logger - An optional Winston logger instance. If not provided will use a silent logger, disabling logging.
      * @throws {InvalidNconfError} - If the object provided for the "nconf" field is not a Nconf.Provider instance.
      */
-    constructor(private nconf: Provider, private database: DatabaseModels, private logger: ILogger = WinstonSilentLogger) {
+    constructor(public nconf: Provider, public database: DatabaseModels, public logger: ILogger = WinstonSilentLogger, public rpcServer: RPCServer) {
     }
 }

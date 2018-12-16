@@ -1,18 +1,22 @@
-import path from "path";
+import * as path from "path";
 
 import AppResource, { WinstonSilentLogger } from './AppResources';
 import { Provider } from "nconf";
-import winston, { Logger as ILogger } from "winston";
-import Sequelize, { Sequelize as ISequalize } from "sequelize";
+import * as winston from "winston";
+import { Logger as ILogger } from "winston";
+import { Sequelize as ISequalize } from "sequelize";
+import * as Sequelize from "Sequelize";
 import yargs from "yargs"; 
-import fs from "fs-extra-promise";
+import * as fs from "fs-extra-promise";
 
 import default_configuration, { env_whitelist } from "./default_configuration";
 import AppResources from "./AppResources";
-import FaceManagementService from "./FaceManagementService";
-import DetectionService from "./DetectionService";
-import { Face } from "face-command-common";
+import { Face, DetectionOptions, EigenFaceRecognizerOptions } from "face-command-common";
 import DatabaseModels from "./DatabaseModels";
+import { Server as RPCServer, MsgPackSerializer, WebSocketTransport, HTTPTransport } from "multi-rpc";
+import { Server as HTTPServer } from "http";
+import { default as expressApp } from "./WebServer";
+import RPCInterface, { default as setupRPC } from "./RPCInterface";
 
 /**
  * The contents of package.json
@@ -46,12 +50,12 @@ function formatEnv(env: string): string {
  * @async
  * @returns {Promise} - A promise that will resolve when the application has started.
  */
-export async function main(nconf?: Provider, sequelize?: ISequalize, logger?: ILogger) {
+export async function Main(nconf?: Provider, sequelize?: ISequalize, logger?: ILogger) {
    /* Configures application resources */ 
     if (!nconf) {
         nconf = new Provider();
 
-        const yargsInstance = yargs()
+        const yargsInstance = yargs({})
             .version(pkg.version)
             .usage("face-command-server [arguments]")
             .strict()
@@ -69,7 +73,7 @@ export async function main(nconf?: Provider, sequelize?: ISequalize, logger?: IL
             .env({
                 whitelist: env_whitelist.concat(env_whitelist.map(formatEnv)),
                 parseValues: true,
-                transform: (obj) => {
+                transform: (obj: any) => {
                     if (env_whitelist.includes(obj.key)) {
                         if (obj.key.indexOf('_') !== -1) {
                             obj.key = formatEnv(obj.key);
@@ -102,6 +106,7 @@ export async function main(nconf?: Provider, sequelize?: ISequalize, logger?: IL
     else if (typeof(logger) === 'undefined') {
         logger = winston.createLogger({
             level: logLevel,
+            format: winston.format.simple(),
             transports: [
                 new winston.transports.Console()
             ]
@@ -117,10 +122,69 @@ export async function main(nconf?: Provider, sequelize?: ISequalize, logger?: IL
     let database = new DatabaseModels(sequelize);
     await database.create();
 
-    const resources = new AppResources(nconf, database, logger);
-    /* Starts application services */
-
-    const faceManagementService = new FaceManagementService(resources);
-    const detectionService = new DetectionService(resources);
+    const rpc = new RPCServer();
+    const resources = new AppResources(nconf, database, logger, rpc);
     
+    /* Listen on RPC */
+    logger.debug("Starting RPC server");
+    const { faceManagementService, detectionService, commandService } = RPCInterface(resources, rpc);
+    
+    const httpServerConfig = nconf.get("httpServer");
+
+    let listenHTTP = () => {};
+
+    if (nconf.get("httpServer")) {
+        const httpServer = new HTTPServer();
+        const msgPack = new MsgPackSerializer();
+        const endpoint = nconf.get("endpoint")
+
+        const wsTransport = new WebSocketTransport(msgPack, httpServer, endpoint);
+        const httpTransport = new HTTPTransport(msgPack, httpServer, endpoint);
+        rpc.addTransport(httpTransport);
+        rpc.addTransport(wsTransport);
+
+        listenHTTP = () => {
+            const host = nconf.get("host");
+            const port = nconf.get("port");
+
+            httpServer.listen(port, host, (error: Error) => {
+                if (error) {
+                    logger.error(`Error binding to ${host}:${port}`);
+                }
+                logger.info(`RPC listening on [http|ws]://${host}:${port}${endpoint}`);
+            });
+        };
+    }
+
+    const additonalTransports = nconf.get("rpcTransports");
+    
+    for (const transport of additonalTransports) {
+        rpc.addTransport(transport);
+    }
+
+    await rpc.listen();
+    logger.debug("RPC server has started");
+
+    listenHTTP();
+
+    /* Autostart detection */
+    if (nconf.get("autostartDetection")) {
+        logger.debug("Starting detection");
+
+        const dbFaces = await database.Face.findAll({
+            where: {
+                Autostart: true
+            }
+        });
+        const faces = await Promise.all<Face>(dbFaces.map(DatabaseModels.FromDBFace));
+
+        const recOptions = new EigenFaceRecognizerOptions(nconf.get("eigenFaceRecognizerOptions:components"), nconf.get("eigenFaceRecognizerOptions:threshold"));
+        const autostartDetectionOptions = new DetectionOptions(nconf.get("imageCaptureFrequency"), recOptions, faces);
+
+        await detectionService.StartDetection(autostartDetectionOptions);
+    }
+
+    logger.info("Application started");
 };
+
+Main();

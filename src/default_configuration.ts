@@ -1,14 +1,16 @@
+import { MsgPackSerializer, WebSocketTransport } from "multi-rpc";
 /**
  * The environment variables that will be read into the application configuration. 
  */
 export const env_whitelist: ReadonlyArray<string> = Object.freeze([
     "LOG_LEVEL",
     "DATABASE_URL",
-    "CAPTURE_DEVICE_PORT"
+    "CAPTURE_DEVICE_PORT",
+    "PORT"
 ]);
 
-export default Object.freeze({
-    "logLevel": "info",
+export default {
+    "logLevel": "verbose",
     "quiet":  false,
     "databaseUrl": "sqlite://face-command.sqlite",
     "captureDevicePort": 0,
@@ -17,8 +19,19 @@ export default Object.freeze({
         "height": 100
     },
     "imageCaptureFrequency": 1000,
+    "imageFormat": ".webp",
     "eigenFaceRecognizerOptions": {
-        "components": -1,
-        "threshold": -1
-    }
-});
+        "components": 10,
+        "threshold": 123
+    },
+    "autostartDetection": true,
+    "httpServer": true,
+    "webInterface": true,
+    "host": "127.0.0.1",
+    "port": 7732,
+    "endpoint": "/rpc",
+    "rpcTransports": [],
+    "commandTypes": [
+        `${__dirname}/CommandTypes/LockScreen`
+    ]
+};

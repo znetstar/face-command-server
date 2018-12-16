@@ -11,7 +11,7 @@
         "outDir": "lib"
     },
     "files": [
-        "src/DetectionService.ts",
-        "src/FaceManagementService.ts"
+        "src/index.ts",
+        "src/CommandTypes/LockScreen.ts"
     ]
 }
