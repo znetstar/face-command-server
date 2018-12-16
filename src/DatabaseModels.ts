@@ -24,7 +24,7 @@ export default class DatabaseModels {
     }
 
     public static async FromDBFace(dbFace: any): Promise<Face> {
-        return new Face(dbFace.id, dbFace.name, dbFace.image, dbFace.autostart)
+        return new Face(dbFace.id, dbFace.name, new Uint8Array(dbFace.image), dbFace.autostart)
     }
 
     public static async FromDBStatus(dbStatus: any): Promise<Status> {

@@ -23,10 +23,10 @@ export default class FaceManagementService extends FaceManagementServiceBase {
     }
 
 
-    public async AddFace(inputImage: Buffer|Mat, name: string, autostart: boolean = false, skipDetection: boolean = false): Promise<Face> {
+    public async AddFace(inputImage: Uint8Array|Mat, name: string, autostart: boolean = false, skipDetection: boolean = false): Promise<Face> {
         const { database, logger, nconf } = this.resources;
         try {
-            let image: Mat = Buffer.isBuffer(inputImage) ? (await imdecodeAsync(inputImage)) : inputImage;
+            let image: Mat = (inputImage instanceof Uint8Array) ? (await imdecodeAsync(Buffer.from(inputImage))) : inputImage;
             if (skipDetection) {
                 image = await this.capture.FaceFromImage(image);
             }
@@ -109,7 +109,7 @@ export default class FaceManagementService extends FaceManagementServiceBase {
         const { logger, database, nconf } = this.resources;
 
         try {
-            let newFace = await imdecodeAsync(face.image);
+            let newFace = await imdecodeAsync(Buffer.from(face.image));
             if (imageFromCamera) {
                 newFace = await this.capture.ImageFromCamera(nconf.get("captureDevicePort"));
             } 

@@ -80,7 +80,7 @@ export default class DetectionService extends DetectionServiceBase {
     }
 
     public async DetectChanges(options: DetectionOptions): Promise<any> {
-        const { logger, nconf, database } = this.resources;
+        const { logger, nconf } = this.resources;
         const { faces, eigenFaceRecognizerOptions } = options;
 
         try {
@@ -91,7 +91,7 @@ export default class DetectionService extends DetectionServiceBase {
 
             const recognizer = new EigenFaceRecognizer(eigenFaceRecognizerOptions.components, eigenFaceRecognizerOptions.threshold);
             
-            const loadedFaces = await Promise.all(faces.map((face: any) => imdecodeAsync(face.image)));
+            const loadedFaces = await Promise.all(faces.map((face: Face) => imdecodeAsync(Buffer.from(face.image))));
             const labels = faces.map<number>((face, index) => index);
 
             logger.debug(`Training recognizer with ${faces.length} faces`);
