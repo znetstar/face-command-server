@@ -139,8 +139,6 @@ export async function Main(nconf?: Provider, sequelize?: ISequalize, logger?: IL
         const endpoint = nconf.get("endpoint")
 
         const wsTransport = new WebSocketTransport(msgPack, httpServer, endpoint);
-        const httpTransport = new HTTPTransport(msgPack, httpServer, endpoint);
-        rpc.addTransport(httpTransport);
         rpc.addTransport(wsTransport);
 
         listenHTTP = () => {
@@ -151,7 +149,7 @@ export async function Main(nconf?: Provider, sequelize?: ISequalize, logger?: IL
                 if (error) {
                     logger.error(`Error binding to ${host}:${port}`);
                 }
-                logger.info(`RPC listening on [http|ws]://${host}:${port}${endpoint}`);
+                logger.info(`RPC listening on ws://${host}:${port}${endpoint}`);
             });
         };
     }
