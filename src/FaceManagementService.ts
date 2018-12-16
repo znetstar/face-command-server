@@ -26,9 +26,9 @@ export default class FaceManagementService extends FaceManagementServiceBase {
     public async AddFace(inputImage: Buffer|Mat, name: string, autostart: boolean = false, skipDetection: boolean = false): Promise<Face> {
         const { database, logger, nconf } = this.resources;
         try {
-            let image: Mat;
-            if (!skipDetection) {
-                image = await this.capture.FaceFromImage(Buffer.isBuffer(inputImage) ? (await imdecodeAsync(inputImage)) : inputImage);
+            let image: Mat = Buffer.isBuffer(inputImage) ? (await imdecodeAsync(inputImage)) : inputImage;
+            if (skipDetection) {
+                image = await this.capture.FaceFromImage(image);
             }
 
             image = await this.capture.PreprocessFace(image);

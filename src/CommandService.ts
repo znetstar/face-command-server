@@ -175,12 +175,11 @@ export default class CommandService extends CommandServiceBase {
         const { database, logger } = this.resources;
 
         let conditionType: Array<number> = [];
-
         if (status.statusType === +StatusType.FacesDetected)
             conditionType.push(+RunConditionType.RunOnFaceDetected);
     
         else if (status.statusType === +StatusType.FacesNoLongerDetected)
-            conditionType.push(+RunConditionType.RunOnFacesNoLongerDetected);
+            conditionType.push(+RunConditionType.RunOnFacesNoLongerDetected, +RunConditionType.RunOnSpecificFacesNoLongerRecognized, +RunConditionType.RunOnAnyFaceNoLongerRecognized);
 
         else if (status.statusType === +StatusType.FacesNoLongerRecognized)
             conditionType.push(+RunConditionType.RunOnSpecificFacesNoLongerRecognized, +RunConditionType.RunOnAnyFaceNoLongerRecognized);
@@ -202,7 +201,7 @@ export default class CommandService extends CommandServiceBase {
         const ranCommand: any = {};
 
         for (const runCondition of runConditions) {
-            if (runCondition.runConditionType === +RunConditionType.RunOnSpecificFacesRecognized || runCondition.runConditionType === +RunConditionType.RunOnSpecificFacesNoLongerRecognized) {
+            if ((status.statusType === +StatusType.FacesRecognized || status.statusType === +StatusType.FacesNoLongerRecognized) && (runCondition.runConditionType === +RunConditionType.RunOnSpecificFacesRecognized || runCondition.runConditionType === +RunConditionType.RunOnSpecificFacesNoLongerRecognized)) {
                 const faceMatch = Boolean(runCondition.facesToRecognize.filter((f1) => status.recognizedFaces.some((f2) => f1.id === f2.id)).length);
                 if (!faceMatch) continue;
             }

@@ -134,7 +134,7 @@ export async function Main(nconf?: Provider, sequelize?: ISequalize, logger?: IL
     let listenHTTP = () => {};
 
     if (nconf.get("httpServer")) {
-        const httpServer = new HTTPServer();
+        const httpServer = new HTTPServer(expressApp(resources));
         const msgPack = new MsgPackSerializer();
         const endpoint = nconf.get("endpoint")
 

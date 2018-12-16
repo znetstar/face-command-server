@@ -10,8 +10,8 @@ export const env_whitelist: ReadonlyArray<string> = Object.freeze([
 ]);
 
 export default {
-    "logLevel": "verbose",
-    "quiet":  false,
+    "logLevel": "info",
+    "quiet": false,
     "databaseUrl": "sqlite://face-command.sqlite",
     "captureDevicePort": 0,
     "imageSize": {
