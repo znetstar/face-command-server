@@ -91,7 +91,7 @@ export default class FaceManagementService extends FaceManagementServiceBase {
         }      
     }  
 
-    public async RemoveFace(faceId: number): Promise<any> {
+    public async RemoveFace(faceId: number): Promise<void> {
         const { logger, database } = this.resources;
         try {
             await database.Face.destroy({

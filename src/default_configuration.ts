@@ -24,7 +24,7 @@ export default {
         "components": 10,
         "threshold": 123
     },
-    "autostartDetection": true,
+    "autostartDetection": false,
     "httpServer": true,
     "webInterface": true,
     "host": "127.0.0.1",
