@@ -1,6 +1,6 @@
 import * as path from "path";
+import { Server as HTTPServer } from "http";
 
-import AppResource, { WinstonSilentLogger } from './AppResources';
 import { Provider } from "nconf";
 import * as winston from "winston";
 import { Logger as ILogger } from "winston";
@@ -8,15 +8,19 @@ import { Sequelize as ISequalize } from "sequelize";
 import * as Sequelize from "Sequelize";
 import yargs from "yargs"; 
 import * as fs from "fs-extra-promise";
-
-import default_configuration, { env_whitelist } from "./default_configuration";
-import AppResources from "./AppResources";
+import { Server as RPCServer, WebSocketTransport, HTTPTransport, MsgPackSerializer } from "multi-rpc";
 import { Face, DetectionOptions, EigenFaceRecognizerOptions } from "face-command-common";
+
+import AppResources, { WinstonSilentLogger } from './AppResources';
+import default_configuration, { env_whitelist } from "./default_configuration";
 import DatabaseModels from "./DatabaseModels";
-import { Server as RPCServer, MsgPackSerializer, WebSocketTransport, HTTPTransport } from "multi-rpc";
-import { Server as HTTPServer } from "http";
 import { default as expressApp } from "./WebServer";
 import RPCInterface, { default as setupRPC } from "./RPCInterface";
+import FaceManagementService from "./FaceManagementService";
+import DetectionService from "./DetectionService";
+import CommandService from "./CommandService";
+import ConfigService from "./ConfigService";
+import { default as FaceCapture } from "./FaceCapture";
 
 /**
  * The contents of package.json
@@ -127,7 +131,8 @@ export async function Main(nconf?: Provider, sequelize?: ISequalize, logger?: IL
     
     /* Listen on RPC */
     logger.debug("Starting RPC server");
-    const { faceManagementService, detectionService, commandService } = RPCInterface(resources, rpc);
+
+    const { faceManagementService, detectionService, commandService, configService } = RPCInterface(resources, rpc);
     
     const httpServerConfig = nconf.get("httpServer");
 

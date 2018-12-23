@@ -4,6 +4,7 @@ import { RunConditionType, Status, Command, CommandServiceBase, CommandTypeBase,
 import AppResources from "./AppResources";
 import DetectionService from "./DetectionService";
 import DatabaseModels from "./DatabaseModels";
+import { default as Constructible } from "face-command-common/lib/ConstructibleExternalResource";
 
 
 export class NonExistantCommandException extends Error {
@@ -30,35 +31,44 @@ export default class CommandService extends CommandServiceBase {
         this.detection.on("StatusChange", this.OnStatusChange.bind(this));
     }
 
-    public GetCommandTypes(): CommandTypeBase[] {
+    public GetCommandTypes(): Constructible<CommandTypeBase>[] {
         return this.resources.nconf.get("commandTypes")
-            .map((type: string) => <CommandTypeBase>require(type).default);
+            .map((type: string): Constructible<CommandTypeBase> => <Constructible<CommandTypeBase>>require(type).default);
     }
 
-    public CommandTypeFromName(name: String): CommandTypeBase {
-        return this.GetCommandTypes()
-            .filter((t: any) => t.name === name)[0];
+    public CommandTypeFromName(name: string): Constructible<CommandTypeBase> {
+        const cmd = this.GetCommandTypes().filter((t: any) => t.name === name)[0];
+
+        if (!cmd) 
+            throw new NonExistantCommandException(name);
+        
+        return cmd;
     }
 
     public GetCommandTypeNames(): string[] {
-        return this.GetCommandTypes().map((t: CommandTypeBase) => Object.getPrototypeOf(t).name);
+        return this.GetCommandTypes().map((t: Constructible<CommandTypeBase>) => t.name);
     }
 
-    public async RPC_AddCommand(commandType: string, runConditions: any[], name: string, data?: any): Promise<Command> {
+    public async RPC_AddCommand(commandTypeName: string, runConditions: any[], name: string, data?: any): Promise<Command> {
         const { database } = this.resources;
 
-        return await this.AddCommand(this.CommandTypeFromName(commandType), (await Promise.all(runConditions.map(async (runConditionRaw): Promise<RunCondition> => {
-            const faces = await Promise.all<Face>(runConditionRaw.facesToRecognize.map(async (faceId: number): Promise<Face> => {
-                const dbFace = await database.Face.findById(faceId);
-                return DatabaseModels.FromDBFace(dbFace);
-            }));
-
+        return await this.AddCommand(commandTypeName, (await Promise.all(runConditions.map(async (runConditionRaw): Promise<RunCondition> => {
+            let faces: Face[] = [];
+            if (runConditionRaw.facesToRecognize) {
+                faces = await Promise.all<Face>(runConditionRaw.facesToRecognize.map(async (faceId: number): Promise<Face> => {
+                    const dbFace = await database.Face.findById(faceId);
+                    return DatabaseModels.FromDBFace(dbFace);
+                }));
+            }
+            
             return new RunCondition(runConditionRaw.runConditionType, faces);
         }))), name, data);
     }
 
-    public async AddCommand(commandType: any, runConditions: RunCondition[], name: string, data?: any): Promise<Command> {
+    public async AddCommand(inputCommandType: string|Constructible<CommandTypeBase>, runConditions: RunCondition[], name: string, data?: any): Promise<Command> {
         const { database } = this.resources;
+        
+        const commandType = (typeof(inputCommandType) === 'string') ? this.CommandTypeFromName(inputCommandType) : inputCommandType;
 
         const dbEntry = <any>{
             name: name,
@@ -90,24 +100,24 @@ export default class CommandService extends CommandServiceBase {
     }
 
     public async GetCommand(id: number): Promise<Command> {
-        return await DatabaseModels.FromDBCommand(id, this.resources);
+        return await DatabaseModels.FromDBCommand((await this.resources.database.Command.findById(id)), this.resources);
     }
 
     public async GetCommands(): Promise<Command[]> {
         return await Promise.all(
             (await this.resources.database.Command.findAll())
-                .map((dbCommand) => DatabaseModels.FromDBCommand(dbCommand.id, this.resources))
+                .map((dbCommand) => DatabaseModels.FromDBCommand(dbCommand, this.resources))
         );
     }
 
-    public async UpdateCommand(commandDelta: Command): Promise<void> {
+    public async UpdateCommand(commandDelta: Command): Promise<Command> {
         const { database } = this.resources;
 
-        const command = await this.GetCommand(commandDelta.id);
         const dbCommand = await database.Command.findById(commandDelta.id);
+        const command = await DatabaseModels.FromDBCommand(dbCommand, this.resources);
 
         const dbCommandDelta: any = {
-            id: commandDelta.id,
+            id: command.id,
             name: commandDelta.name,
             type: commandDelta.type
         };
@@ -137,14 +147,17 @@ export default class CommandService extends CommandServiceBase {
 
                 await dbCommand.addRunCondition(dbRunCondition);
 
-                for (const face of runConditionDelta.facesToRecognize) {
-                    const dbFace = database.Face.findById(face.id);
-                    await dbRunCondition.addFace(dbFace);
+                if (runConditionDelta.facesToRecognize) {
+                    for (const face of runConditionDelta.facesToRecognize) {
+                        const dbFace = database.Face.findById(face.id);
+                        await dbRunCondition.addFace(dbFace);
+                    }
                 }
             }
         }
 
-        await database.Command.update(dbCommandDelta);
+        await database.Command.update(dbCommandDelta, { where: { id: dbCommandDelta.id } });
+        return await DatabaseModels.FromDBCommand(dbCommand, this.resources);
     }
 
     public async RemoveCommand(id: number): Promise<void> {
@@ -161,7 +174,8 @@ export default class CommandService extends CommandServiceBase {
         const { logger } = this.resources;
         try {
             const options = new CommandOptions(status, command.data);
-            const type = new (command.type)();
+            const commandType = typeof(command.type) === 'string' ? this.CommandTypeFromName(command.type) : command.type;
+            const type = new commandType(this.resources);
 
             type.Run(options);
 

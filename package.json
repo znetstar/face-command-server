@@ -43,7 +43,7 @@
     "fs-extra-promise": "^1.0.1",
     "grunt-contrib-clean": "^2.0.0",
     "msgpack-lite": "^0.1.26",
-    "multi-rpc": "^1.1.9",
+    "multi-rpc": "^1.2.5",
     "nconf": "^0.10.0",
     "opencv4nodejs": "^4.8.0",
     "sequelize": "^4.38.1",

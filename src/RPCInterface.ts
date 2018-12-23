@@ -1,12 +1,12 @@
-import { Server as RPCServer } from "multi-rpc";
-import { Error as SequelizeError } from "sequelize";
+import { Server as RPCServer, Notification } from "multi-rpc";
 import AppResources from "./AppResources";
 import FaceManagementService from "./FaceManagementService";
 import DetectionService from "./DetectionService";
 import CommandService from "./CommandService";
+import ConfigService from "./ConfigService";
 import { CommandExecutionError } from "./Errors";
 import { default as FaceCapture } from "./FaceCapture";
-import { Command } from "face-command-common";
+import { EventEmitter2 as EventEmitter } from "eventemitter2";
 
 /**
  * Runs the function 
@@ -29,7 +29,23 @@ export default (resources: AppResources, rpcServer: RPCServer) => {
     const capture = new FaceCapture(resources);
     const faceManagementService = new FaceManagementService(resources, capture);
     const detectionService = new DetectionService(resources, capture);
+
+    function notifyOnEvent(eventEmitter: EventEmitter, eventName: string) {
+        function notifyHandler() {
+            const notification = new Notification(eventName, Array.from(arguments));
+            rpcServer.sendAll(notification);
+        }
+
+        eventEmitter.on(eventName, notifyHandler);
+
+        return notifyHandler;
+    }
+
+    notifyOnEvent(detectionService, "StatusChange")
+    notifyOnEvent(detectionService, "DetectionRunning")
+
     const commandService = new CommandService(resources, detectionService);
+    const configService = new ConfigService(resources);
 
     rpcServer.methods.faceManagement = {
         AddFace: wrap(faceManagementService, faceManagementService.AddFace),
@@ -41,12 +57,11 @@ export default (resources: AppResources, rpcServer: RPCServer) => {
     };
 
     rpcServer.methods.detection = {
-        AddStatus: wrap(detectionService, detectionService.AddStatus),
         DetectChanges: wrap(detectionService, detectionService.DetectChanges),
-        GetStatus: wrap(detectionService, detectionService.GetStatus),
-        StartDetection: wrap(detectionService, detectionService.StartDetection),
+        StartDetection: wrap(detectionService, detectionService.RPC_StartDetection),
         StatusHistory: wrap(detectionService, detectionService.StatusHistory),
-        StopDetection: wrap(detectionService, detectionService.StopDetection)
+        StopDetection: wrap(detectionService, detectionService.StopDetection),
+        IsDetectionRunning: wrap(detectionService, detectionService.IsDetectionRunning)
     };
 
     rpcServer.methods.commands = {
@@ -54,12 +69,22 @@ export default (resources: AppResources, rpcServer: RPCServer) => {
         GetCommand: wrap(commandService, commandService.GetCommand),
         GetCommands: wrap(commandService, commandService.GetCommands),
         RemoveCommand: wrap(commandService, commandService.RemoveCommand),
-        UpdateCommand: wrap(commandService, commandService.UpdateCommand)
+        UpdateCommand: wrap(commandService, commandService.UpdateCommand),
+        GetCommandTypeNames: wrap(commandService, commandService.GetCommandTypeNames)
     };
+
+    rpcServer.methods.config = {
+        GetConfigValue: wrap(configService, configService.GetConfigValue),
+        GetConfig: wrap(configService, configService.GetConfig),
+        SetConfigValue: wrap(configService, configService.SetConfigValue),
+        SaveConfig: wrap(configService, configService.SaveConfig),
+        LoadConfig: wrap(configService, configService.LoadConfig)
+    }; 
 
     return {
         faceManagementService, 
         detectionService,
-        commandService
+        commandService,
+        configService
     }
 }

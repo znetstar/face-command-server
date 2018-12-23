@@ -8,7 +8,7 @@ import {
     imencode
 } from "opencv4nodejs";
 import { Op } from "sequelize";
-import { DetectionServiceBase, Status, StatusType, DetectionOptions, Face } from "face-command-common";
+import { DetectionServiceBase, Status, StatusType, DetectionOptions, Face, EigenFaceRecognizerOptions } from "face-command-common";
 import AppResources from "./AppResources";
 import { default as DatabaseModels } from "./DatabaseModels";
 import FaceCapture from "./FaceCapture";
@@ -27,7 +27,7 @@ export default class DetectionService extends DetectionServiceBase {
         this.resources.logger.verbose(`A change in the detection status has occured: ${status}`);
     } 
 
-    public get IsDetectionRunning(): boolean {
+    public async IsDetectionRunning(): Promise<boolean> {
         return (typeof(this.detectionTimeout) !== 'undefined');
     }
 
@@ -140,16 +140,33 @@ export default class DetectionService extends DetectionServiceBase {
 
         } catch (error) {
             logger.error(`An error occured while detecting: ${error}`);
-            clearInterval(this.detectionTimeout);
+            this.StopDetection();
         }
     }
 
     public StopDetection(): void {
         clearInterval(this.detectionTimeout);
+        this.emit("DetectionRunning", false);
+    }
+
+    public async RPC_StartDetection(inputOptions: any): Promise<void> {
+        const { database } = this.resources;
+        const eigenFaceRecognizerOptions = new EigenFaceRecognizerOptions(inputOptions.eigenFaceRecognizerOptions.components, inputOptions.eigenFaceRecognizerOptions.threshold);
+        
+        const faces = await Promise.all<Face>(inputOptions.faces.map(async (faceId: number): Promise<Face> => {
+            const dbFace = await database.Face.findById(faceId);
+            return DatabaseModels.FromDBFace(dbFace);
+        }));
+        
+        const options = new DetectionOptions(inputOptions.frequency, eigenFaceRecognizerOptions, faces);
+
+        return this.StartDetection(options);
     }
 
     public StartDetection(options: DetectionOptions): void {
         this.resources.logger.info(`Beginning detection with ${options.faces.length} faces, capturing every ${options.frequency/1000} seconds`);
         this.detectionTimeout = setInterval(this.DetectChanges.bind(this), options.frequency, options);
+        
+        this.emit("DetectionRunning", true);
     }
 }

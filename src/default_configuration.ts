@@ -19,7 +19,7 @@ export default {
         "height": 100
     },
     "imageCaptureFrequency": 1000,
-    "imageFormat": ".webp",
+    "imageFormat": ".png",
     "eigenFaceRecognizerOptions": {
         "components": 10,
         "threshold": 123

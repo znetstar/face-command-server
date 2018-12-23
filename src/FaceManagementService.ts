@@ -3,7 +3,6 @@ import {
     imdecodeAsync,
     Mat,
     imencodeAsync,
-    imdecode
 } from "opencv4nodejs";
 import AppResources from "./AppResources";
 import FaceCapture from "./FaceCapture";
@@ -66,7 +65,7 @@ export default class FaceManagementService extends FaceManagementServiceBase {
         } catch (error) {
             logger.error(`Error adding face from the capture source: ${error.message}`);
             throw error;
-        }
+        }   
     }
 
     public async GetFace(faceId: number): Promise<Face> {
@@ -105,7 +104,7 @@ export default class FaceManagementService extends FaceManagementServiceBase {
         }     
     }
 
-    public async UpdateFace(face: Face, scanForFace: boolean = false, imageFromCamera: boolean = false) {
+    public async UpdateFace(face: Face, scanForFace: boolean = false, imageFromCamera: boolean = false): Promise<Face> {
         const { logger, database, nconf } = this.resources;
 
         try {
@@ -113,10 +112,12 @@ export default class FaceManagementService extends FaceManagementServiceBase {
             if (imageFromCamera) {
                 newFace = await this.capture.ImageFromCamera(nconf.get("captureDevicePort"));
             } 
-            if (imageFromCamera || scanForFace) {
+            if (imageFromCamera || scanForFace) {   
                 face.image = await imencodeAsync(nconf.get("imageFormat"), await this.capture.FaceFromImage(newFace));
             }
             await database.Face.update(face);
+            
+            return face;
         } catch (error) {
             logger.error(`Error updating face: ${error.message}`);
             throw error;
