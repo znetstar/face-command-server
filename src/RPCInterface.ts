@@ -1,4 +1,5 @@
 import { Server as RPCServer, Notification } from "multi-rpc";
+import { EventEmitter2 as EventEmitter } from "eventemitter2";
 import AppResources from "./AppResources";
 import FaceManagementService from "./FaceManagementService";
 import DetectionService from "./DetectionService";
@@ -6,8 +7,7 @@ import CommandService from "./CommandService";
 import ConfigService from "./ConfigService";
 import { CommandExecutionError } from "./Errors";
 import { default as FaceCapture } from "./FaceCapture";
-import { EventEmitter2 as EventEmitter } from "eventemitter2";
-
+import LogsService from "./LogsService";
 /**
  * Runs the function 
  * 
@@ -30,9 +30,9 @@ export default (resources: AppResources, rpcServer: RPCServer) => {
     const faceManagementService = new FaceManagementService(resources, capture);
     const detectionService = new DetectionService(resources, capture);
 
-    function notifyOnEvent(eventEmitter: EventEmitter, eventName: string) {
+    function notifyOnEvent(eventEmitter: EventEmitter, eventName: string, prefix?: string) {
         function notifyHandler() {
-            const notification = new Notification(eventName, Array.from(arguments));
+            const notification = new Notification(prefix+'.'+eventName, Array.from(arguments));
             rpcServer.sendAll(notification);
         }
 
@@ -41,11 +41,14 @@ export default (resources: AppResources, rpcServer: RPCServer) => {
         return notifyHandler;
     }
 
-    notifyOnEvent(detectionService, "StatusChange")
-    notifyOnEvent(detectionService, "DetectionRunning")
+    notifyOnEvent(detectionService, "StatusChange", "detection")
+    notifyOnEvent(detectionService, "DetectionRunning", "detection")
 
     const commandService = new CommandService(resources, detectionService);
     const configService = new ConfigService(resources);
+    const logsService = new LogsService(resources);
+
+    notifyOnEvent(logsService, "LogEntry", "logs")
 
     rpcServer.methods.faceManagement = {
         AddFace: wrap(faceManagementService, faceManagementService.AddFace),
@@ -81,10 +84,15 @@ export default (resources: AppResources, rpcServer: RPCServer) => {
         LoadConfig: wrap(configService, configService.LoadConfig)
     }; 
 
+    rpcServer.methods.logs = {
+        StreamHistory: wrap(logsService, logsService.StreamHistory)
+    };
+
     return {
         faceManagementService, 
         detectionService,
         commandService,
-        configService
+        configService,
+        logsService
     }
 }

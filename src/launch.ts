@@ -116,7 +116,7 @@ export async function Main(nconf?: Provider, sequelize?: ISequalize, logger?: IL
             ]
         });
     } 
-
+    
     if (!sequelize) {
         sequelize = new Sequelize(nconf.get("databaseUrl"));
 

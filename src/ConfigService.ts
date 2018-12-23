@@ -3,7 +3,13 @@ import { cloneDeep } from "lodash";
 import AppResources from "./AppResources";
 
 export default class ConfigService extends ConfigServiceBase {
-    constructor(protected resources: AppResources) { super(resources); }
+    constructor(protected resources: AppResources) { 
+        super(resources);
+        resources.logger.on("logging", (transport, level, msg, meta) => {
+            
+        });
+    }
+
     public async GetConfigValue(key: string): Promise<any> {
         return this.resources.nconf.get(key);
     } 
