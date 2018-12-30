@@ -80,6 +80,7 @@ export default (resources: AppResources, rpcServer: RPCServer) => {
         GetConfigValue: wrap(configService, configService.GetConfigValue),
         GetConfig: wrap(configService, configService.GetConfig),
         SetConfigValue: wrap(configService, configService.SetConfigValue),
+        SetConfig: wrap(configService, configService.SetConfig),
         SaveConfig: wrap(configService, configService.SaveConfig),
         LoadConfig: wrap(configService, configService.LoadConfig)
     }; 

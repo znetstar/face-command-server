@@ -1,5 +1,4 @@
 import * as msgpack from "msgpack-lite";
-import { uniq } from "lodash";
 import { RunConditionType, Status, Command, CommandServiceBase, CommandTypeBase, RunCondition, Face, FaceManagementServiceBase, StatusType, CommandOptions } from "face-command-common";
 import AppResources from "./AppResources";
 import DetectionService from "./DetectionService";
