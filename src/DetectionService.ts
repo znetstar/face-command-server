@@ -158,13 +158,25 @@ export default class DetectionService extends DetectionServiceBase {
             return DatabaseModels.FromDBFace(dbFace);
         }));
         
-        const options = new DetectionOptions(inputOptions.frequency, eigenFaceRecognizerOptions, faces);
+        const options = new DetectionOptions(inputOptions.frequency, eigenFaceRecognizerOptions, faces, inputOptions.autostartFaces);
 
         return this.StartDetection(options);
     }
 
-    public StartDetection(options: DetectionOptions): void {
+    public async StartDetection(options: DetectionOptions): Promise<void> {
+        const { database } = this.resources; 
         this.resources.logger.info(`Beginning detection with ${options.faces.length} faces, capturing every ${options.frequency/1000} seconds`);
+
+        if (options.autostartFaces) {
+            const dbFaces = await database.Face.findAll({
+                where: {
+                    autostart: true
+                }
+            });
+
+            options.faces = await Promise.all(dbFaces.map(DatabaseModels.FromDBFace));
+        }   
+
         this.detectionTimeout = setInterval(this.DetectChanges.bind(this), options.frequency, options);
         
         this.emit("DetectionRunning", true);

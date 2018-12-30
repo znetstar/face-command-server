@@ -174,15 +174,8 @@ export async function Main(nconf?: Provider, sequelize?: ISequalize, logger?: IL
     if (nconf.get("autostartDetection")) {
         logger.debug("Starting detection");
 
-        const dbFaces = await database.Face.findAll({
-            where: {
-                Autostart: true
-            }
-        });
-        const faces = await Promise.all<Face>(dbFaces.map(DatabaseModels.FromDBFace));
-
         const recOptions = new EigenFaceRecognizerOptions(nconf.get("eigenFaceRecognizerOptions:components"), nconf.get("eigenFaceRecognizerOptions:threshold"));
-        const autostartDetectionOptions = new DetectionOptions(nconf.get("imageCaptureFrequency"), recOptions, faces);
+        const autostartDetectionOptions = new DetectionOptions(nconf.get("imageCaptureFrequency"), recOptions, [], true);
 
         await detectionService.StartDetection(autostartDetectionOptions);
     }
