@@ -5,13 +5,15 @@ import {
     INTER_CUBIC,
     imdecodeAsync,
     COLOR_RGB2GRAY,
-    imencode
+    imencode,
+    imencodeAsync
 } from "opencv4nodejs";
 import { Op } from "sequelize";
 import { DetectionServiceBase, Status, StatusType, DetectionOptions, Face, EigenFaceRecognizerOptions } from "face-command-common";
 import AppResources from "./AppResources";
 import { default as DatabaseModels } from "./DatabaseModels";
 import FaceCapture from "./FaceCapture";
+import { writeFile } from "fs-extra";
 
 export default class DetectionService extends DetectionServiceBase {
     protected detectionTimeout: any;
@@ -84,21 +86,22 @@ export default class DetectionService extends DetectionServiceBase {
         const { faces, eigenFaceRecognizerOptions } = options;
 
         try {
-            if (!faces.length) {
-                logger.debug(`No faces available to train`);
-                return;
-            }
-
             const recognizer = new EigenFaceRecognizer(eigenFaceRecognizerOptions.components, eigenFaceRecognizerOptions.threshold);
             
             const loadedFaces = await Promise.all(faces.map((face: Face) => imdecodeAsync(Buffer.from(face.image))));
             const labels = faces.map<number>((face, index) => index);
 
-            logger.debug(`Training recognizer with ${faces.length} faces`);
-            await recognizer.trainAsync(loadedFaces, labels);
+            if (loadedFaces.length) {
+                logger.debug(`Training recognizer with ${faces.length} faces`);
+                await recognizer.trainAsync(loadedFaces, labels);
+            }
 
             logger.verbose("Grabbing frame from capture source");
-            const frame = await this.capture.ImageFromCamera(nconf.get("captureDevicePort"));
+            let frame = await this.capture.ImageFromCamera(nconf.get("captureDevicePort"));
+
+            frame = await frame.bgrToGrayAsync();
+            frame = await this.capture.StabilizeContrast(frame);
+
             logger.debug("Detecting faces in image");
             const facesDetected = await this.capture.FacesFromImage(frame);
 
@@ -140,7 +143,8 @@ export default class DetectionService extends DetectionServiceBase {
 
         } catch (error) {
             logger.error(`An error occured while detecting: ${error}`);
-            this.StopDetection();
+            if (nconf.get("stopOnDetectionError"))
+                this.StopDetection();
         }
     }
 

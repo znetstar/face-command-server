@@ -41,6 +41,7 @@
     "eventemitter2": "^5.0.1",
     "express": "^4.16.3",
     "face-command-common": "^1.2.1",
+    "face-command-web": "^1.0.1",
     "fs-extra-promise": "^1.0.1",
     "grunt-contrib-clean": "^2.0.0",
     "msgpack-lite": "^0.1.26",

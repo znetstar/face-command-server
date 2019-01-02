@@ -198,10 +198,11 @@ export default class CommandService extends CommandServiceBase {
             conditionType.push(+RunConditionType.RunOnSpecificFacesNoLongerRecognized, +RunConditionType.RunOnAnyFaceNoLongerRecognized);
 
         else if (status.statusType === +StatusType.FacesRecognized)
-            conditionType.push(+RunConditionType.RunOnSpecificFacesRecognized, +RunConditionType.RunOnAnyFaceRecognized);
+            conditionType.push(+RunConditionType.RunOnAnyFaceNoLongerRecognized, +RunConditionType.RunOnAnyFaceRecognized);
 
         else if (status.statusType === +StatusType.NoFacesDetected)
             conditionType.push(+RunConditionType.RunOnNoFacesDetected);
+            
 
         const dbRunConditions = await database.RunCondition.findAll({
             where: {

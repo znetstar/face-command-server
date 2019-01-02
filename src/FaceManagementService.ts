@@ -26,7 +26,10 @@ export default class FaceManagementService extends FaceManagementServiceBase {
         const { database, logger, nconf } = this.resources;
         try {
             let image: Mat = (inputImage instanceof Uint8Array) ? (await imdecodeAsync(Buffer.from(inputImage))) : inputImage;
-            if (skipDetection) {
+            
+            image = await image.bgrToGrayAsync();
+
+            if (!skipDetection) {
                 image = await this.capture.FaceFromImage(image);
             }
 
@@ -108,13 +111,21 @@ export default class FaceManagementService extends FaceManagementServiceBase {
         const { logger, database, nconf } = this.resources;
 
         try {
-            let newFace = await imdecodeAsync(Buffer.from(face.image));
+            let newFace;
             if (imageFromCamera) {
                 newFace = await this.capture.ImageFromCamera(nconf.get("captureDevicePort"));
-            } 
-            if (imageFromCamera || scanForFace) {   
-                face.image = await imencodeAsync(nconf.get("imageFormat"), await this.capture.FaceFromImage(newFace));
+            } else {
+                newFace = await imdecodeAsync(Buffer.from(face.image));
             }
+            if (imageFromCamera || scanForFace) {   
+                newFace = await this.capture.FaceFromImage(newFace);
+            }
+
+            newFace = await newFace.bgrToGrayAsync();
+            newFace = await this.capture.PreprocessFace(newFace);
+
+            face.image = await imencodeAsync(nconf.get("imageFormat"), newFace);
+
             await database.Face.update(face);
             
             return face;

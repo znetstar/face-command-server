@@ -1,11 +1,13 @@
 import AppResources from "./AppResources";
+import { flatten, sum } from "lodash";
 import {
     CascadeClassifier,
     HAAR_FRONTALFACE_ALT2,
     Rect,
     Mat,
     VideoCapture,
-    INTER_CUBIC
+    INTER_CUBIC,
+    COLOR_BGR2GRAY
 } from "opencv4nodejs";
 
 /**
@@ -39,10 +41,8 @@ export default class FaceCapture {
      * @returns - An array of grayscale images containing each face detected. 
      */
     public async FacesFromImage(source: Mat): Promise<Mat[]> {
-        const grayImage = await source.bgrToGrayAsync();
-
-        const { objects } = await this.faceClassifier.detectMultiScaleAsync(grayImage, 1.1, 10);
-        return objects.map((bounds: Rect) => grayImage.getRegion(bounds));
+        const { objects } = await this.faceClassifier.detectMultiScaleAsync(source, 1.1, 10);
+        return objects.map((bounds: Rect) => source.getRegion(bounds));
     }
 
     /** 
@@ -72,6 +72,17 @@ export default class FaceCapture {
 
         return await image.resizeAsync(nconf.get("imageSize:width"), nconf.get("imageSize:height"), INTER_CUBIC);
     }
+    
+
+    public async GetBrightness(image: Mat): Promise<number> {
+        const data = image.getDataAsArray();
+        
+        return (sum(flatten(data)))/(data.length * data[0].length)/255;
+    }
+    
+    public async StabilizeContrast(image: Mat): Promise<Mat> {
+        return await image.equalizeHistAsync();
+    }
 
     /**
      * Operations that should be run each face image before adding it to the database.
@@ -81,9 +92,11 @@ export default class FaceCapture {
      */
     public async PreprocessFace(image: Mat): Promise<Mat> {
         // Resize face
-        let mat = this.ResizeFace(image);
+        image = await this.ResizeFace(image);
+        // Stablize contrast
+        image = await this.StabilizeContrast(image);
 
-        return mat;
+        return image;
     }
 
     /**
@@ -93,6 +106,7 @@ export default class FaceCapture {
      */
     public async ImageFromCamera(devicePort: number): Promise<Mat> {
         const captureSource = new VideoCapture(devicePort);
+        
         return await captureSource.readAsync();
     }
 }

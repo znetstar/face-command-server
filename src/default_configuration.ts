@@ -24,7 +24,9 @@ export default {
         "components": 10,
         "threshold": 123
     },
-    "autostartDetection": false,
+    "stopOnDetectionError": false,
+    "targetBrightness": 0.8,
+    "autostartDetection": true,
     "httpServer": true,
     "webInterface": true,
     "host": "127.0.0.1",
