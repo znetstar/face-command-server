@@ -12,7 +12,7 @@ import { Server as RPCServer, WebSocketTransport, HTTPTransport, MsgPackSerializ
 import { Face, DetectionOptions, EigenFaceRecognizerOptions } from "face-command-common";
 
 import AppResources, { WinstonSilentLogger } from './AppResources';
-import default_configuration, { env_whitelist } from "./default_configuration";
+import default_configuration, { env_whitelist } from "./DefaultConfiguration";
 import DatabaseModels from "./DatabaseModels";
 import { default as expressApp } from "./WebServer";
 import RPCInterface, { default as setupRPC } from "./RPCInterface";
