@@ -63,7 +63,7 @@ export default class FaceManagementService extends FaceManagementServiceBase {
 
         try {
             logger.verbose("Attempting to add a face from the capture source");
-            const image = await ImageFromCamera(nconf.get("captureDevicePort"));
+            const image = await ImageFromCamera();
             return await this.AddFace(image, name, autostart, true);
         } catch (error) {
             logger.error(`Error adding face from the capture source: ${error.message}`);
@@ -113,7 +113,7 @@ export default class FaceManagementService extends FaceManagementServiceBase {
         try {
             let newFace;
             if (imageFromCamera) {
-                newFace = await this.capture.ImageFromCamera(nconf.get("captureDevicePort"));
+                newFace = await this.capture.ImageFromCamera();
             } else {
                 newFace = await imdecodeAsync(Buffer.from(face.image));
             }

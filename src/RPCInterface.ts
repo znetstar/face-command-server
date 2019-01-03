@@ -26,7 +26,9 @@ function wrap(context: any, func: Function) {
 }
 
 export default (resources: AppResources, rpcServer: RPCServer) => {
-    const capture = new FaceCapture(resources);
+    const { nconf } = resources;
+    
+    const capture = new FaceCapture(resources, nconf.get("captureDevicePort"));
     const faceManagementService = new FaceManagementService(resources, capture);
     const detectionService = new DetectionService(resources, capture);
 

@@ -81,7 +81,7 @@ export default class DetectionService extends DetectionServiceBase {
 
         try {   
             logger.silly("Grabbing frame from capture source");
-            let frame = await this.capture.ImageFromCamera(nconf.get("captureDevicePort"));
+            let frame = await this.capture.ImageFromCamera();
 
             frame = await frame.bgrToGrayAsync();
 

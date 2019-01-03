@@ -29,8 +29,10 @@ export class TooManyFacesError extends Error {
 }
 
 export default class FaceCapture {
-    constructor(protected resources: AppResources) {
+    public captureSource: VideoCapture;
 
+    constructor(protected resources: AppResources, devicePort: number) {
+        this.captureSource = new VideoCapture(devicePort);
     }
 
     private faceClassifier: CascadeClassifier = new CascadeClassifier(HAAR_FRONTALFACE_ALT2);
@@ -104,9 +106,7 @@ export default class FaceCapture {
      * @param devicePort - Which device to capture from.
      * @returns - A single image from the capture source.
      */
-    public async ImageFromCamera(devicePort: number): Promise<Mat> {
-        const captureSource = new VideoCapture(devicePort);
-        
-        return await captureSource.readAsync();
+    public async ImageFromCamera(): Promise<Mat> {
+        return await this.captureSource.readAsync();
     }
 }
