@@ -57,5 +57,7 @@ export default {
     // Will require() any types listed below and will attempt to use the "default" export as the class. 
     "commandTypes": [
         `${__dirname}/CommandTypes/LockScreen`
-    ]
+    ],
+    // The minimum brightness needed for detection to run.
+    "minimumBrightness": 0.5
 };

@@ -1,12 +1,6 @@
 import {
     EigenFaceRecognizer,
-    imdecode,
-    Mat,
-    INTER_CUBIC,
     imdecodeAsync,
-    COLOR_RGB2GRAY,
-    imencode,
-    imencodeAsync
 } from "opencv4nodejs";
 import { Op } from "sequelize";
 import { DetectionServiceBase, Status, StatusType, DetectionOptions, Face, EigenFaceRecognizerOptions } from "face-command-common";
@@ -85,7 +79,30 @@ export default class DetectionService extends DetectionServiceBase {
         const { logger, nconf } = this.resources;
         const { faces, eigenFaceRecognizerOptions } = options;
 
-        try {    
+        try {   
+            logger.verbose("Grabbing frame from capture source");
+            let frame = await this.capture.ImageFromCamera(nconf.get("captureDevicePort"));
+
+            frame = await frame.bgrToGrayAsync();
+
+            const currentBrightness = await this.capture.GetBrightness(frame);
+            const minBrightness = nconf.get("minimumBrightness");
+            if (currentBrightness < minBrightness) {
+                let displayBrightness = Math.round(currentBrightness * 100) / 100;
+                if (!(<any>options).brightnessAlert) {
+                    logger.warn(`Current brightness ${displayBrightness} is too low to run detection. The minimum is ${minBrightness}`);
+                    (<any>options).brightnessAlert = true;
+                }
+                else
+                    logger.debug(`Brightness ${displayBrightness} is still too low to run detection. Minimum is ${minBrightness}`);
+
+                return;
+            }
+
+            (<any>options).brightnessAlert = false;
+
+            frame = await this.capture.StabilizeContrast(frame);
+
             const loadedFaces = await Promise.all(faces.map((face: Face) => imdecodeAsync(Buffer.from(face.image))));
             const labels = faces.map<number>((face, index) => index);
 
@@ -97,13 +114,8 @@ export default class DetectionService extends DetectionServiceBase {
                 (<any>options)._recognizer = recognizer;
             }
 
-            logger.verbose("Grabbing frame from capture source");
-            let frame = await this.capture.ImageFromCamera(nconf.get("captureDevicePort"));
 
-            frame = await frame.bgrToGrayAsync();
-            frame = await this.capture.StabilizeContrast(frame);
-
-            logger.debug("Detecting faces in image");
+            logger.silly("Detecting faces in image");
             const facesDetected = await this.capture.FacesFromImage(frame);
 
             var statusType: StatusType = +StatusType.NoFacesDetected;
