@@ -196,6 +196,7 @@ export default class DetectionService extends DetectionServiceBase {
             options.faces = await Promise.all(dbFaces.map(DatabaseModels.FromDBFace));
         }   
 
+        
         this.detectionTimeout = setInterval(this.DetectChanges.bind(this), options.frequency, options);
         
         this.emit("DetectionRunning", true);

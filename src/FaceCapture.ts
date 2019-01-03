@@ -28,6 +28,12 @@ export class TooManyFacesError extends Error {
     }
 }
 
+export class ImageBelowBrightnessThreshold extends Error {
+    constructor(brightness: number, targetBrightness: number) {
+        super(`Brightness level of image ${brightness} was below the minimum required for processing ${targetBrightness}`);
+    }
+}
+
 export default class FaceCapture {
     public captureSource: VideoCapture;
 
@@ -91,8 +97,17 @@ export default class FaceCapture {
      * 
      * @param image - The face image to preprocess.
      * @returns - The preprocessed image.
+     * 
      */
     public async PreprocessFace(image: Mat): Promise<Mat> {
+        const { nconf } = this.resources;
+        
+        const brightness = await this.GetBrightness(image);
+        const targetBrightness: number = nconf.get("targetBrightness");
+        if (brightness < targetBrightness) {
+            throw new ImageBelowBrightnessThreshold(brightness, targetBrightness);
+        }
+
         // Resize face
         image = await this.ResizeFace(image);
         // Stablize contrast
@@ -103,7 +118,6 @@ export default class FaceCapture {
 
     /**
      * Takes a frame from the capture source.
-     * @param devicePort - Which device to capture from.
      * @returns - A single image from the capture source.
      */
     public async ImageFromCamera(): Promise<Mat> {

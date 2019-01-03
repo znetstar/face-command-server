@@ -63,7 +63,7 @@ export default class FaceManagementService extends FaceManagementServiceBase {
 
         try {
             logger.verbose("Attempting to add a face from the capture source");
-            const image = await ImageFromCamera();
+            const image = await this.capture.ImageFromCamera();
             return await this.AddFace(image, name, autostart, true);
         } catch (error) {
             logger.error(`Error adding face from the capture source: ${error.message}`);
