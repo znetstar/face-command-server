@@ -1,12 +1,12 @@
 import * as msgpack from "msgpack-lite";
-import { RunConditionType, Status, Command, CommandServiceBase, CommandTypeBase, RunCondition, Face, FaceManagementServiceBase, StatusType, CommandOptions } from "face-command-common";
+import { RunConditionType, Status, Command, CommandServiceBase, CommandTypeBase, RunCondition, Face, StatusType, CommandOptions } from "face-command-common";
+import { default as Constructible } from "face-command-common/lib/ConstructibleExternalResource";
 import AppResources from "./AppResources";
 import DetectionService from "./DetectionService";
 import DatabaseModels from "./DatabaseModels";
-import { default as Constructible } from "face-command-common/lib/ConstructibleExternalResource";
 
 
-export class NonExistantCommandException extends Error {
+export class NonExistantCommandTypeException extends Error {
     constructor(commandName: string) {
         super(`Command "${commandName}" does not exist`);
     }
@@ -39,7 +39,7 @@ export default class CommandService extends CommandServiceBase {
         const cmd = this.GetCommandTypes().filter((t: any) => t.name === name)[0];
 
         if (!cmd) 
-            throw new NonExistantCommandException(name);
+            throw new NonExistantCommandTypeException(name);
         
         return cmd;
     }

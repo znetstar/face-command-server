@@ -42,8 +42,10 @@ export default {
     "webInterface": true,
     // Options that will be passed to the websocket server.
     "webSocketServer": {
-        "maxReceivedMessageSize": 20971520,
-        "maxReceivedFrameSize": 20971520
+        // Maximum amount size of each WebSocket message, in bytes.
+        "maxReceivedMessageSize": 20971520, // 20MB
+        // Maximum amount size of each WebSocket frame, in bytes.
+        "maxReceivedFrameSize": 20971520 // 20MB
     },
     // Default host the HTTP server will bind to.
     "host": "127.0.0.1",

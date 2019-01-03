@@ -80,7 +80,7 @@ export default class DetectionService extends DetectionServiceBase {
         const { faces, eigenFaceRecognizerOptions } = options;
 
         try {   
-            logger.verbose("Grabbing frame from capture source");
+            logger.silly("Grabbing frame from capture source");
             let frame = await this.capture.ImageFromCamera(nconf.get("captureDevicePort"));
 
             frame = await frame.bgrToGrayAsync();
@@ -109,7 +109,7 @@ export default class DetectionService extends DetectionServiceBase {
             let recognizer = (<any>options)._recognizer;
             if (!recognizer && loadedFaces.length) {
                 recognizer = new EigenFaceRecognizer(eigenFaceRecognizerOptions.components, eigenFaceRecognizerOptions.threshold);
-                logger.debug(`Training recognizer with ${faces.length} face(s)`);
+                logger.silly(`Training recognizer with ${faces.length} face(s)`);
                 await recognizer.trainAsync(loadedFaces, labels);
                 (<any>options)._recognizer = recognizer;
             }
@@ -122,7 +122,7 @@ export default class DetectionService extends DetectionServiceBase {
             let facesRecognized: Face[] = [];
 
             if (facesDetected.length) {
-                logger.verbose(`Detected ${facesDetected.length} face(s) in image`);
+                logger.debug(`Detected ${facesDetected.length} face(s) in image`);
                 statusType = +StatusType.FacesDetected;
 
                 if (loadedFaces.length) {
@@ -130,7 +130,7 @@ export default class DetectionService extends DetectionServiceBase {
                         let faceDetected = facesDetected[i];
                         faceDetected = await this.capture.ResizeFace(faceDetected);
 
-                        logger.debug(`Running prediction for face ${i + 1}`);
+                        logger.silly(`Running prediction for face ${i + 1}`);
                         const result = await recognizer.predictAsync(faceDetected);
                         if (result.label > -1) {
                             statusType = +StatusType.FacesRecognized;

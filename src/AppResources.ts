@@ -1,4 +1,3 @@
-import { Server as HTTPServer } from "http";
 import { Provider } from "nconf";
 import * as winston from "winston";
 import { Logger as ILogger } from "winston";
