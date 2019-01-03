@@ -30,7 +30,7 @@ export default class DetectionService extends DetectionServiceBase {
     } 
 
     public async IsDetectionRunning(): Promise<boolean> {
-        return (typeof(this.detectionTimeout) !== 'undefined');
+        return (typeof(this.detectionTimeout) !== 'undefined') && (this.detectionTimeout !== null);
     }
 
     public async AddStatus(statusType: StatusType, time: Date = new Date(), recognizedFaces: Face[] = []): Promise<Status> {
@@ -85,15 +85,16 @@ export default class DetectionService extends DetectionServiceBase {
         const { logger, nconf } = this.resources;
         const { faces, eigenFaceRecognizerOptions } = options;
 
-        try {
-            const recognizer = new EigenFaceRecognizer(eigenFaceRecognizerOptions.components, eigenFaceRecognizerOptions.threshold);
-            
+        try {    
             const loadedFaces = await Promise.all(faces.map((face: Face) => imdecodeAsync(Buffer.from(face.image))));
             const labels = faces.map<number>((face, index) => index);
 
-            if (loadedFaces.length) {
-                logger.debug(`Training recognizer with ${faces.length} faces`);
+            let recognizer = (<any>options)._recognizer;
+            if (!recognizer && loadedFaces.length) {
+                recognizer = new EigenFaceRecognizer(eigenFaceRecognizerOptions.components, eigenFaceRecognizerOptions.threshold);
+                logger.debug(`Training recognizer with ${faces.length} face(s)`);
                 await recognizer.trainAsync(loadedFaces, labels);
+                (<any>options)._recognizer = recognizer;
             }
 
             logger.verbose("Grabbing frame from capture source");
@@ -150,6 +151,8 @@ export default class DetectionService extends DetectionServiceBase {
 
     public StopDetection(): void {
         clearInterval(this.detectionTimeout);
+        this.detectionTimeout = null;
+        this.resources.logger.info("Detection stopped");
         this.emit("DetectionRunning", false);
     }
 
@@ -169,7 +172,7 @@ export default class DetectionService extends DetectionServiceBase {
 
     public async StartDetection(options: DetectionOptions): Promise<void> {
         const { database } = this.resources; 
-        this.resources.logger.info(`Beginning detection with ${options.faces.length} faces, capturing every ${options.frequency/1000} seconds`);
+        this.resources.logger.info(`Beginning detection with ${options.faces.length} face(s), capturing every ${options.frequency/1000} seconds`);
 
         if (options.autostartFaces) {
             const dbFaces = await database.Face.findAll({
