@@ -144,6 +144,13 @@ export async function Main(nconf?: Provider, sequelize?: ISequalize, logger?: IL
         const endpoint = nconf.get("endpoint")
 
         const wsTransport = new WebSocketTransport(msgPack, httpServer, endpoint);
+        
+        const wsConfig = nconf.get("webSocketServer");
+
+        for (let prop in wsConfig) {
+            (<any>wsTransport.server.config)[prop] = wsConfig[prop];
+        }
+
         rpc.addTransport(wsTransport);
 
         listenHTTP = () => {

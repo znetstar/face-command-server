@@ -26,9 +26,13 @@ export default {
     },
     "stopOnDetectionError": false,
     "targetBrightness": 0.8,
-    "autostartDetection": true,
+    "autostartDetection": false,
     "httpServer": true,
     "webInterface": true,
+    "webSocketServer": {
+        "maxReceivedMessageSize": 20971520,
+        "maxReceivedFrameSize": 20971520
+    },
     "host": "127.0.0.1",
     "port": 7732,
     "endpoint": "/rpc",
