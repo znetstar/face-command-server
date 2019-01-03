@@ -7,7 +7,8 @@
     "test": "mocha -r ts-node/register --exit test/index.ts",
     "docs": "grunt docs",
     "build": "grunt ts",
-    "prepublish": "npm run build"
+    "prepublish": "npm run build",
+    "start": "bin/face-command-server"
   },
   "repository": {
     "type": "git",
@@ -41,6 +42,7 @@
     "eventemitter2": "^5.0.1",
     "express": "^4.16.3",
     "face-command-common": "^1.2.1",
+    "face-command-web": "^1.0.2",
     "fs-extra-promise": "^1.0.1",
     "grunt-contrib-clean": "^2.0.0",
     "msgpack-lite": "^0.1.26",

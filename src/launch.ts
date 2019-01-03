@@ -189,5 +189,3 @@ export async function Main(nconf?: Provider, sequelize?: ISequalize, logger?: IL
 
     logger.info("Application started");
 };
-
-Main();
