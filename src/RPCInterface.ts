@@ -66,7 +66,8 @@ export default (resources: AppResources, rpcServer: RPCServer) => {
         StartDetection: wrap(detectionService, detectionService.RPC_StartDetection),
         StatusHistory: wrap(detectionService, detectionService.StatusHistory),
         StopDetection: wrap(detectionService, detectionService.StopDetection),
-        IsDetectionRunning: wrap(detectionService, detectionService.IsDetectionRunning)
+        IsDetectionRunning: wrap(detectionService, detectionService.IsDetectionRunning),
+        GetLastStatus: wrap(detectionService, detectionService.GetLastStatus)
     };
 
     rpcServer.methods.commands = {

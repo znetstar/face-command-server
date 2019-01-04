@@ -7,7 +7,6 @@ import { DetectionServiceBase, Status, StatusType, DetectionOptions, Face, Eigen
 import AppResources from "./AppResources";
 import { default as DatabaseModels } from "./DatabaseModels";
 import FaceCapture from "./FaceCapture";
-import { writeFile } from "fs-extra";
 
 export default class DetectionService extends DetectionServiceBase {
     protected detectionTimeout: any;
@@ -27,7 +26,11 @@ export default class DetectionService extends DetectionServiceBase {
         return (typeof(this.detectionTimeout) !== 'undefined') && (this.detectionTimeout !== null);
     }
 
-    public async AddStatus(statusType: StatusType, time: Date = new Date(), recognizedFaces: Face[] = []): Promise<Status> {
+    public async GetLastStatus(): Promise<Status> {
+        return this.lastStatus;
+    }
+
+    public async AddStatus(statusType: StatusType, time: Date = new Date(), brightness: number, recognizedFaces: Face[] = []): Promise<Status> {
         const { database } = this.resources;
 
         const dbStatus = await database.Status.create({
@@ -40,7 +43,7 @@ export default class DetectionService extends DetectionServiceBase {
             await dbStatus.addFace(dbFace);
         }
 
-        const status = new Status(dbStatus.id, statusType, time, recognizedFaces);
+        const status = new Status(dbStatus.id, statusType, time, brightness, recognizedFaces);
         /**
          * Is emitted when there has been a status change
          * @param status - The status object.
@@ -75,82 +78,88 @@ export default class DetectionService extends DetectionServiceBase {
         );
     }
 
+    
+
     public async DetectChanges(options: DetectionOptions): Promise<any> {
         const { logger, nconf } = this.resources;
         const { faces, eigenFaceRecognizerOptions } = options;
+        options.state = options.state || {};
 
         try {   
-            logger.silly("Grabbing frame from capture source");
+            logger.debug("Grabbing frame from capture source");
             let frame = await this.capture.ImageFromCamera();
 
             frame = await frame.bgrToGrayAsync();
 
+            var statusType: StatusType = +StatusType.NoFacesDetected;
+            var facesRecognized: Face[] = [];
+
             const currentBrightness = await this.capture.GetBrightness(frame);
             const minBrightness = nconf.get("minimumBrightness");
             if (currentBrightness < minBrightness) {
+                statusType = +StatusType.BrightnessTooLow;
                 let displayBrightness = Math.round(currentBrightness * 100) / 100;
-                if (!(<any>options).brightnessAlert) {
+                if (!options.state.brightnessAlert) {
                     logger.warn(`Current brightness ${displayBrightness} is too low to run detection. The minimum is ${minBrightness}`);
-                    (<any>options).brightnessAlert = true;
+                    options.state.brightnessAlert = true;
+                    if (this.lastStatus && this.lastStatus.statusType === (+StatusType.FacesDetected || this.lastStatus.statusType === +StatusType.FacesRecognized)) {
+                        statusType
+                    }
                 }
                 else
                     logger.debug(`Brightness ${displayBrightness} is still too low to run detection. Minimum is ${minBrightness}`);
-
-                return;
             }
+            else {
+                options.state.brightnessAlert = false;
 
-            (<any>options).brightnessAlert = false;
+                frame = await this.capture.StabilizeContrast(frame);
 
-            frame = await this.capture.StabilizeContrast(frame);
+                const loadedFaces = await Promise.all(faces.map((face: Face) => imdecodeAsync(Buffer.from(face.image))));
+                const labels = faces.map<number>((face, index) => index);
 
-            const loadedFaces = await Promise.all(faces.map((face: Face) => imdecodeAsync(Buffer.from(face.image))));
-            const labels = faces.map<number>((face, index) => index);
-
-            let recognizer = (<any>options)._recognizer;
-            if (!recognizer && loadedFaces.length) {
-                recognizer = new EigenFaceRecognizer(eigenFaceRecognizerOptions.components, eigenFaceRecognizerOptions.threshold);
-                logger.silly(`Training recognizer with ${faces.length} face(s)`);
-                await recognizer.trainAsync(loadedFaces, labels);
-                (<any>options)._recognizer = recognizer;
-            }
+                let recognizer = options.state.recognizer;
+                if (!recognizer && loadedFaces.length) {
+                    recognizer = new EigenFaceRecognizer(eigenFaceRecognizerOptions.components, eigenFaceRecognizerOptions.threshold);
+                    logger.debug(`Training recognizer with ${faces.length} face(s)`);
+                    await recognizer.trainAsync(loadedFaces, labels);
+                    options.state.recognizer = recognizer;
+                }
 
 
-            logger.silly("Detecting faces in image");
-            const facesDetected = await this.capture.FacesFromImage(frame);
+                logger.debug("Detecting faces in image");
+                const facesDetected = await this.capture.FacesFromImage(frame);
 
-            var statusType: StatusType = +StatusType.NoFacesDetected;
-            let facesRecognized: Face[] = [];
+                if (facesDetected.length) {
+                    logger.debug(`Detected ${facesDetected.length} face(s) in image`);
+                    statusType = +StatusType.FacesDetected;
 
-            if (facesDetected.length) {
-                logger.debug(`Detected ${facesDetected.length} face(s) in image`);
-                statusType = +StatusType.FacesDetected;
+                    if (loadedFaces.length) {
+                        for (let i = 0; i < facesDetected.length; i++) {
+                            let faceDetected = facesDetected[i];
+                            faceDetected = await this.capture.ResizeFace(faceDetected);
 
-                if (loadedFaces.length) {
-                    for (let i = 0; i < facesDetected.length; i++) {
-                        let faceDetected = facesDetected[i];
-                        faceDetected = await this.capture.ResizeFace(faceDetected);
+                            logger.debug(`Running prediction for face ${i + 1}`);
+                            const result = await recognizer.predictAsync(faceDetected);
+                            if (result.label > -1) {
+                                statusType = +StatusType.FacesRecognized;
+                                const faceIndex = result.label;
+                                const face = faces[faceIndex];
+                                facesRecognized.push(face);
+                                logger.debug(`Face with ID "${face.id}" has been detected in the image.`);
+                            }
+                        }
 
-                        logger.silly(`Running prediction for face ${i + 1}`);
-                        const result = await recognizer.predictAsync(faceDetected);
-                        if (result.label > -1) {
-                            statusType = +StatusType.FacesRecognized;
-                            const faceIndex = result.label;
-                            const face = faces[faceIndex];
-                            facesRecognized.push(face);
-                            logger.debug(`Face with ID "${face.id}" has been detected in the image.`);
+                        if (!facesRecognized.length && this.lastStatus && this.lastStatus.statusType === +StatusType.FacesRecognized) {
+                            statusType = +StatusType.FacesNoLongerRecognized;
                         }
                     }
-
-                    if (!facesRecognized.length && this.lastStatus && this.lastStatus.statusType === +StatusType.FacesRecognized) {
-                        statusType = +StatusType.FacesNoLongerRecognized;
-                    }
+                } else if (this.lastStatus && (this.lastStatus.statusType === +StatusType.FacesDetected || this.lastStatus.statusType === +StatusType.FacesRecognized)) {
+                    statusType = +StatusType.FacesNoLongerDetected;
                 }
-            } else if (this.lastStatus && (this.lastStatus.statusType === +StatusType.FacesDetected || this.lastStatus.statusType === +StatusType.FacesRecognized)) {
-                statusType = +StatusType.FacesNoLongerDetected;
             }
 
             if (!this.lastStatus || ( this.lastStatus.statusType !== statusType )) {
-                const status = await this.AddStatus(statusType, new Date(), facesRecognized);
+                const status = await this.AddStatus(statusType, new Date(), currentBrightness, facesRecognized);
                 this.lastStatus = status;
             }
 

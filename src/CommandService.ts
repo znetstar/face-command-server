@@ -5,25 +5,36 @@ import AppResources from "./AppResources";
 import DetectionService from "./DetectionService";
 import DatabaseModels from "./DatabaseModels";
 
-
-export class NonExistantCommandTypeException extends Error {
+/**
+ * This error is thrown when the user references a command type that doesn't exist.
+ */
+export class NonExistantCommandTypeError extends Error {
     constructor(commandName: string) {
         super(`Command "${commandName}" does not exist`);
     }
 }
 
-export class FacesRecognizedSetInInvalidRunCondition extends Error {
+/**
+ * This error is thrown when a RunCondition with a type other than 2 or 6 has the FacesRecognized field set.
+ */
+export class FacesRecognizedSetInInvalidRunConditionError extends Error {
     constructor(runConditionType: RunConditionType) {
         super(`Run condition ${Number(runConditionType)} does not have \"FacesRecognized\" as a paramater`);
     }
 }
 
-export class RunConditionExistsException extends Error {
+/**
+ * This error is thrown when the user attempts to add a RunCondition that already exists to a command.
+ */
+export class RunConditionExistsError extends Error {
     constructor(commandId: Number, runConditionType: RunConditionType) {
         super(`Command \"${commandId}\" already contains run condition \"${Number(runConditionType)}\"`);
     }
 }
 
+/**
+ * A service that allows.
+ */
 export default class CommandService extends CommandServiceBase {
     constructor(protected resources: AppResources, protected detection: DetectionService) {
         super(resources);
@@ -39,7 +50,7 @@ export default class CommandService extends CommandServiceBase {
         const cmd = this.GetCommandTypes().filter((t: any) => t.name === name)[0];
 
         if (!cmd) 
-            throw new NonExistantCommandTypeException(name);
+            throw new NonExistantCommandTypeError(name);
         
         return cmd;
     }
@@ -178,7 +189,7 @@ export default class CommandService extends CommandServiceBase {
 
             type.Run(options);
 
-            logger.info(`Successfully ran command ${command.id}`);
+            logger.info(`Successfully ran command "${command.name}"`);
         } catch (error) {
             logger.error(`Error running ${command.id}: ${error.message}`);
         }
@@ -191,7 +202,7 @@ export default class CommandService extends CommandServiceBase {
         if (status.statusType === +StatusType.FacesDetected)
             conditionType.push(+RunConditionType.RunOnFaceDetected);
     
-        else if (status.statusType === +StatusType.FacesNoLongerDetected)
+        else if ((status.statusType === +StatusType.FacesNoLongerDetected) || (status.statusType === +StatusType.BrightnessTooLow))
             conditionType.push(+RunConditionType.RunOnFacesNoLongerDetected, +RunConditionType.RunOnSpecificFacesNoLongerRecognized, +RunConditionType.RunOnAnyFaceNoLongerRecognized);
 
         else if (status.statusType === +StatusType.FacesNoLongerRecognized)
@@ -202,7 +213,6 @@ export default class CommandService extends CommandServiceBase {
 
         else if (status.statusType === +StatusType.NoFacesDetected)
             conditionType.push(+RunConditionType.RunOnNoFacesDetected);
-            
 
         const dbRunConditions = await database.RunCondition.findAll({
             where: {
@@ -212,7 +222,7 @@ export default class CommandService extends CommandServiceBase {
 
         const runConditions = await Promise.all(dbRunConditions.map(DatabaseModels.FromDBRunCondition));
 
-        const ranCommand: any = {};
+        const ranCommand = new Set<number>();
 
         for (const runCondition of runConditions) {
             if ((status.statusType === +StatusType.FacesRecognized || status.statusType === +StatusType.FacesNoLongerRecognized) && (runCondition.runConditionType === +RunConditionType.RunOnSpecificFacesRecognized || runCondition.runConditionType === +RunConditionType.RunOnSpecificFacesNoLongerRecognized)) {
@@ -220,14 +230,17 @@ export default class CommandService extends CommandServiceBase {
                 if (!faceMatch) continue;
             }
 
-            if (ranCommand[runCondition.commandId]) 
+            if (ranCommand.has(runCondition.commandId)) 
                 continue;
 
             const dbCommand = await database.Command.findById(runCondition.commandId);
-            const command = await DatabaseModels.FromDBCommand(dbCommand, this.resources);
+            if (dbCommand) {
+                const command = await DatabaseModels.FromDBCommand(dbCommand, this.resources);
 
-            ranCommand[command.id] = true;
-            await this.RunCommand(command, status);
+                ranCommand.add(runCondition.commandId);
+                logger.debug(`Running command "${command.name}", type: ${command.type}`);
+                await this.RunCommand(command, status);
+            }
         }
     }
 }

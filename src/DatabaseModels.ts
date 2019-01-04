@@ -1,7 +1,7 @@
 
 import * as Sequelize from "sequelize";
 import { Face, Command, Status, RunCondition } from "face-command-common";
-import { INTEGER, STRING, BLOB, BOOLEAN, SMALLINT, TIME, Sequelize as ISequelize } from "sequelize";
+import { INTEGER, STRING, BLOB, BOOLEAN, SMALLINT, TIME, FLOAT, Sequelize as ISequelize } from "sequelize";
 import * as msgpack from "msgpack-lite";
 import { default as AppResources } from "./AppResources";
 import { default as CommandService } from "./CommandService";
@@ -29,7 +29,7 @@ export default class DatabaseModels {
 
     public static async FromDBStatus(dbStatus: any): Promise<Status> {
         const dbFaces = await dbStatus.getFaces();
-        return new Status(dbStatus.id, dbStatus.statusType, dbStatus.time, (await Promise.all<Face>(dbFaces.map(DatabaseModels.FromDBFace))));
+        return new Status(dbStatus.id, dbStatus.statusType, dbStatus.time, dbStatus.brightness, (await Promise.all<Face>(dbFaces.map(DatabaseModels.FromDBFace))));
     }
 
     public static async FromDBCommand(dbCommand: any, resources: AppResources): Promise<Command> {
@@ -57,8 +57,9 @@ export default class DatabaseModels {
     
         this.Status = this.sequelize.define("Status", {
             id: { type: INTEGER, primaryKey: true, autoIncrement: true },
-            statusType: { type: SMALLINT  },
-            time: { type: TIME }
+            statusType: { type: SMALLINT },
+            time: { type: TIME },
+            brightness: { type: FLOAT }
         });
     
         this.Command = this.sequelize.define("Command", {
