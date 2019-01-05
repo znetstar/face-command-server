@@ -28,9 +28,15 @@ export class TooManyFacesError extends Error {
     }
 }
 
-export class ImageBelowBrightnessThreshold extends Error {
+export class ImageBelowBrightnessThresholdError extends Error {
     constructor(brightness: number, targetBrightness: number) {
         super(`Brightness level of image ${brightness} was below the minimum required for processing ${targetBrightness}`);
+    }
+}
+
+export class ClassifierDoesNotExistError extends Error {
+    constructor(classifier: string) {
+        super(`Classifier "${classifier}" does not exist`);
     }
 }
 
@@ -38,10 +44,19 @@ export default class FaceCapture {
     public captureSource: VideoCapture;
 
     constructor(protected resources: AppResources, devicePort: number) {
+        const { nconf } = resources;
         this.captureSource = new VideoCapture(devicePort);
+
+        const classifierName = nconf.get("cascadeClassifier");
+        const classiferInfo = resources.nconf.get("cascadeClassifiers").filter((c: any) => c.key === classifierName)[0];
+
+        if (!classiferInfo) 
+            throw new ClassifierDoesNotExistError(classifierName);
+
+        this.faceClassifier = new CascadeClassifier(classiferInfo.value);
     }
 
-    private faceClassifier: CascadeClassifier = new CascadeClassifier(HAAR_FRONTALFACE_ALT2);
+    private faceClassifier: CascadeClassifier;
 
     /**
      * Extracts faces from a provided image. 
@@ -105,7 +120,7 @@ export default class FaceCapture {
         const brightness = await this.GetBrightness(image);
         const targetBrightness: number = nconf.get("targetBrightness");
         if (brightness < targetBrightness) {
-            throw new ImageBelowBrightnessThreshold(brightness, targetBrightness);
+            throw new ImageBelowBrightnessThresholdError(brightness, targetBrightness);
         }
 
         // Resize face

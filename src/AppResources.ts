@@ -22,7 +22,7 @@ export default class AppResources implements IAppResources {
      * @param nconf - An Nconf.Provider instance.
      * @param database - An object containing database models.
      * @param logger - An optional Winston logger instance. If not provided will use a silent logger, disabling logging.
-     * @throws {InvalidNconfError} - If the object provided for the "nconf" field is not a Nconf.Provider instance.
+     * @param rpcServer - RPC interface the application willl expose.
      */
     constructor(public nconf: Provider, public database: DatabaseModels, public logger: ILogger = WinstonSilentLogger, public rpcServer: RPCServer) {
     }

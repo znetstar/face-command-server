@@ -1,3 +1,4 @@
+import * as opencv4nodejs from "opencv4nodejs";
 /**
  * The environment variables that will be read into the application configuration. 
  */
@@ -61,5 +62,34 @@ export default {
         `${__dirname}/CommandTypes/LockScreen`
     ],
     // The minimum brightness needed for detection to run.
-    "minimumBrightness": 0.5
+    "minimumBrightness": 0.5,
+    // Cascade classifier that will be used.
+    "cascadeClassifier": "HAAR_FRONTALFACE_ALT2",
+    // Cascade classifiers that are available.
+    "cascadeClassifiers": [
+        {
+            key: "HAAR_FRONTALCATFACE",
+            value: opencv4nodejs.HAAR_FRONTALCATFACE
+        },
+        {
+            key: "HAAR_FRONTALCATFACE_EXTENDED",
+            value: opencv4nodejs.HAAR_FRONTALCATFACE_EXTENDED
+        },
+        {
+            key: "HAAR_FRONTALFACE_ALT",
+            value: opencv4nodejs.HAAR_FRONTALFACE_ALT
+        },
+        {
+            key: "HAAR_FRONTALFACE_ALT2",
+            value: opencv4nodejs.HAAR_FRONTALFACE_ALT2
+        },
+        {
+            key: "HAAR_FRONTALFACE_ALT_TREE",
+            value: opencv4nodejs.HAAR_FRONTALFACE_ALT_TREE
+        },
+        {
+            key: "HAAR_FRONTALFACE_DEFAULT",
+            value: opencv4nodejs.HAAR_FRONTALFACE_DEFAULT
+        }
+    ]
 };

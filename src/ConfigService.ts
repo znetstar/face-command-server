@@ -3,6 +3,8 @@ import { cloneDeep } from "lodash";
 import AppResources from "./AppResources";
 
 export default class ConfigService extends ConfigServiceBase {
+    private readonlyProperties = new Set([]);
+
     constructor(protected resources: AppResources) { 
         super(resources);
         resources.logger.on("logging", (transport, level, msg, meta) => {
@@ -15,6 +17,17 @@ export default class ConfigService extends ConfigServiceBase {
     } 
 
     public async SetConfigValue(key: string, value: any): Promise<void> {
+        // Prevents arrays from being set.
+        if (key.indexOf(":") !== -1) {
+            const base = key.split(":").shift();
+            
+            if (Array.isArray(this.resources.nconf.get(base))) 
+                return;
+        }
+
+        if (this.readonlyProperties.has(key))
+            return;
+
         this.resources.nconf.set(key, value);
     } 
 
