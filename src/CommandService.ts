@@ -4,13 +4,14 @@ import { default as Constructible } from "face-command-common/lib/ConstructibleE
 import AppResources from "./AppResources";
 import DetectionService from "./DetectionService";
 import DatabaseModels from "./DatabaseModels";
+import { CommandExecutionError } from "./Errors";
 
 /**
  * This error is thrown when the user references a command type that doesn't exist.
  */
 export class NonExistantCommandTypeError extends Error {
-    constructor(commandName: string) {
-        super(`Command "${commandName}" does not exist`);
+    constructor(commandType: string) {
+        super(`Command "${commandType}" does not exist`);
     }
 }
 
@@ -27,8 +28,17 @@ export class FacesRecognizedSetInInvalidRunConditionError extends Error {
  * This error is thrown when the user attempts to add a RunCondition that already exists to a command.
  */
 export class RunConditionExistsError extends Error {
-    constructor(commandId: Number, runConditionType: RunConditionType) {
+    constructor(commandId: number, runConditionType: RunConditionType) {
         super(`Command \"${commandId}\" already contains run condition \"${Number(runConditionType)}\"`);
+    }
+}
+
+/**
+ * This error is thrown when the user tries to retrieve a command that already exists.
+ */
+export class NonExistantCommandError extends Error {
+    constructor(commandId: number) {
+        super(`Command \"${commandId}\" does not exist.`);
     }
 }
 
@@ -130,6 +140,7 @@ export default class CommandService extends CommandServiceBase {
             
             await dbCommand.addRunCondition(dbCondition);
             condition.id = dbCondition.id;
+            condition.commandId = dbCommand.id;
             
             // Creates the relation between the faces assigned to the run condition and the run condition.
             if (condition.facesToRecognize) {
@@ -148,7 +159,23 @@ export default class CommandService extends CommandServiceBase {
      * @param id - ID of the command to retrieve.
      */
     public async GetCommand(id: number): Promise<Command> {
-        return await DatabaseModels.FromDBCommand((await this.resources.database.Command.findById(id)), this.resources);
+        const cmd = await this.resources.database.Command.findById(id);
+        if (!cmd) 
+            throw new NonExistantCommandError(id);
+
+        return await DatabaseModels.FromDBCommand(cmd, this.resources);;
+    }
+    
+    /**
+     * Retrieves a command from the database, but ensures the type returned is a string.
+     * @param id - ID of the command to retrieve.
+     */
+    public async RPC_GetCommand(id: number): Promise<Command> {
+        const cmd = await this.GetCommand(id);
+        if (typeof(cmd.type) === 'function')
+            cmd.type = (<Function>cmd.type).name;
+        
+        return cmd;
     }
 
     /**
@@ -162,6 +189,24 @@ export default class CommandService extends CommandServiceBase {
     }
 
     /**
+     * Retrieves all commands from the database , but ensures the types returned are strings.
+     */
+    public async RPC_GetCommands(): Promise<Command[]> {
+        const commands = await Promise.all(
+            (await this.resources.database.Command.findAll())
+                .map((dbCommand) => DatabaseModels.FromDBCommand(dbCommand, this.resources))
+        );
+
+        return commands.map((cmd): Command => {
+            if (typeof(cmd.type) === 'function')
+                cmd.type = (<Function>cmd.type).name;
+        
+            return cmd;       
+        });
+    }
+    
+
+    /**
      * Updates an existing command with inputted properties.
      * @param commandDelta - Properties to update the command with.
      */
@@ -169,13 +214,17 @@ export default class CommandService extends CommandServiceBase {
         const { database } = this.resources;
 
         const dbCommand = await database.Command.findById(commandDelta.id);
+
+        if (!dbCommand) 
+            throw new NonExistantCommandError(commandDelta.id);
+
         const command = await DatabaseModels.FromDBCommand(dbCommand, this.resources);
 
         // Properties that will be sent to the database to replace the existing command.
         const dbCommandDelta: any = {
             id: command.id,
             name: commandDelta.name,
-            type: commandDelta.type
+            type: (typeof(commandDelta.type) === 'function') ? (<Function>commandDelta.type).name : commandDelta.type
         };
 
         // Compares the run conditions of the `commandDelta` object with the existing runConditions, removing run existing run conditions if needed.
@@ -244,11 +293,13 @@ export default class CommandService extends CommandServiceBase {
             const commandType = typeof(command.type) === 'string' ? this.CommandTypeFromName(command.type) : command.type;
             const type = new commandType(this.resources);
 
-            type.Run(options);
+            logger.debug(`Running command "${command.name}"`);
 
-            logger.info(`Successfully ran command "${command.name}"`);
-        } catch (error) {
-            logger.error(`Error running ${command.id}: ${error.message}`);
+            return await type.Run(options);
+        } catch (innerError) {
+            const error = new CommandExecutionError(innerError);
+            logger.error(`Error executing command "${command.name}": ${error.message}`);
+            throw error;
         }
     }
 
@@ -270,12 +321,16 @@ export default class CommandService extends CommandServiceBase {
         else if (status.statusType === +StatusType.FacesNoLongerRecognized)
             conditionType.push(+RunConditionType.RunOnSpecificFacesNoLongerRecognized, +RunConditionType.RunOnAnyFaceNoLongerRecognized);
 
+        else if (status.statusType === +StatusType.FacesRecognized && (status.recognizedFaces))
+            conditionType.push(+RunConditionType.RunOnFaceDetected, +RunConditionType.RunOnSpecificFacesRecognized, +RunConditionType.RunOnAnyFaceRecognized);
+
         else if (status.statusType === +StatusType.FacesRecognized)
-            conditionType.push(+RunConditionType.RunOnAnyFaceNoLongerRecognized, +RunConditionType.RunOnAnyFaceRecognized);
+            conditionType.push(+RunConditionType.RunOnFaceDetected, +RunConditionType.RunOnAnyFaceRecognized);
 
         else if (status.statusType === +StatusType.NoFacesDetected)
             conditionType.push(+RunConditionType.RunOnNoFacesDetected);
 
+        
         const dbRunConditions = await database.RunCondition.findAll({
             where: {
                 $or: conditionType.map((runConditionType): any => ({ runConditionType }))
@@ -299,9 +354,9 @@ export default class CommandService extends CommandServiceBase {
             if (dbCommand) {
                 const command = await DatabaseModels.FromDBCommand(dbCommand, this.resources);
 
-                ranCommand.add(runCondition.commandId);
-                logger.debug(`Running command "${command.name}", type: ${command.type}`);
+                ranCommand.add(runCondition.commandId);;
                 await this.RunCommand(command, status);
+                logger.info(`Successfully ran command "${command.name}"`)
             }
         }
     }

@@ -72,8 +72,8 @@ export default (resources: AppResources, rpcServer: RPCServer) => {
 
     rpcServer.methods.commands = {
         AddCommand: wrap(commandService, commandService.RPC_AddCommand),
-        GetCommand: wrap(commandService, commandService.GetCommand),
-        GetCommands: wrap(commandService, commandService.GetCommands),
+        GetCommand: wrap(commandService, commandService.RPC_GetCommand),
+        GetCommands: wrap(commandService, commandService.RPC_GetCommands),
         RemoveCommand: wrap(commandService, commandService.RemoveCommand),
         UpdateCommand: wrap(commandService, commandService.UpdateCommand),
         GetCommandTypeNames: wrap(commandService, commandService.GetCommandTypeNames)

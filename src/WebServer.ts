@@ -13,7 +13,7 @@ export default (resources: AppResources) => {
         app.use('/', express.static(webInterfacePath));
         
         app.use((req, res, next) => {
-            res.sendfile(path.join(webInterfacePath, "index.html"));
+            res.sendFile(path.join(webInterfacePath, "index.html"));
         });
     }
 

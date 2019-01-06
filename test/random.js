@@ -37,7 +37,7 @@ function captureSource() {
     };
 }
 
-async function capture() { 
+async function capture(resources) { 
     let oldFc = FaceCapture.prototype;
 
     FaceCapture = function (resources) {
@@ -48,7 +48,7 @@ async function capture() {
 
     FaceCapture.prototype = oldFc;
 
-    const capture = new FaceCapture((await appResources()), 0);
+    const capture = new FaceCapture(resources || (await appResources()), 0);
     return capture;
 }
 
@@ -58,8 +58,14 @@ async function detectionSvc (app) {
 }
 
 async function commandSvc(app) {
-    app = app || (await appResources())
+    app = app || (await appResources());
     return new CommandService(app, (await detectionSvc(app)));
+}
+
+async function commandSvcReplaceRun(app, fn) {
+    const svc = await commandSvc(app);
+    svc.RunCommand = fn.bind(svc);
+    return svc;
 }
 
 async function configSvc(app) {
@@ -74,12 +80,23 @@ async function logsSvc(app) {
 
 async function facesSvc(app, faceCapture) {
     app = app || (await appResources())
-    return new FaceManagementService(app, (faceCapture || (await capture())));
+    return new FaceManagementService(app, (faceCapture || (await capture(app))));
 }
+
 
 async function appResources () {
     const nconf = new (Nconf.Provider)();
     nconf.use("memory");
+
+    const defaultConfig = require("../lib/DefaultConfiguration").default;
+    defaultConfig.commandTypes = [
+        sampleCommandTypePath()
+    ];
+
+    defaultConfig.minimumBrightness = 0;
+
+    nconf.defaults(defaultConfig);
+
     const info = await new Promise((resolve, reject) => {
         temp.open(".sqlite", (err, info) => {
             if (err) reject(err);
@@ -90,6 +107,7 @@ async function appResources () {
     const db = new Sequelize(`sqlite://${info.path}`);
     await db.authenticate();
     const dbModels = new DatabaseModels(db);
+    await dbModels.create();
     const rpcServer = new Server();
     return new AppResources(nconf, dbModels, WinstonSilentLogger, rpcServer);
 }
@@ -101,6 +119,7 @@ module.exports = {
     detectionSvc,
     appResources,
     commandSvc,
+    commandSvcReplaceRun,
     configSvc,
     logsSvc,
     facesSvc,
