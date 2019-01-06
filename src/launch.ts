@@ -94,7 +94,7 @@ export async function Main(nconf?: Provider, sequelize?: ISequalize, logger?: IL
             process.exit(1);
             return;
         } else if (configPath) {
-            nconf.file(configPath);
+            nconf.file({ file: configPath });
         } else {
             nconf.use('memory');
         }

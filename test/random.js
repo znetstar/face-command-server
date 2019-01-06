@@ -84,16 +84,19 @@ async function facesSvc(app, faceCapture) {
 }
 
 
-async function appResources () {
+async function appResources (defaultConfig) {
     const nconf = new (Nconf.Provider)();
-    nconf.use("memory");
 
-    const defaultConfig = require("../lib/DefaultConfiguration").default;
-    defaultConfig.commandTypes = [
-        sampleCommandTypePath()
-    ];
+    if (!defaultConfig) {
+        nconf.use("memory");
+        
+        defaultConfig = require("../lib/DefaultConfiguration").default;
+        defaultConfig.commandTypes = [
+            sampleCommandTypePath()
+        ];
 
-    defaultConfig.minimumBrightness = 0;
+        defaultConfig.minimumBrightness = 0;
+    }
 
     nconf.defaults(defaultConfig);
 

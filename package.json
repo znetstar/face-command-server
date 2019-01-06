@@ -1,7 +1,7 @@
 {
   "name": "face-commmand-server",
   "version": "1.0.0",
-  "description": "",
+  "description": "Backend logic for Face Command <https://github.com/znetstar/face-command>",
   "main": "lib/index.js",
   "scripts": {
     "test": "mocha --exit test/index.js",

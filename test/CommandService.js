@@ -8,8 +8,7 @@ const { NonExistantCommandTypeError, NonExistantCommandError, CommandExecutionEr
 describe("CommandService", function () {
     describe("#constructor()", function () {
         it("should create successfully", async function () {
-            const cmd = await random.commandSvc();
-            assert.ok(cmd);
+            await random.commandSvc();
         });
     });
 
