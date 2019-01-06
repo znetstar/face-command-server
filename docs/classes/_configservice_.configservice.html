@@ -69,11 +69,18 @@
 <div class="container container-main">
 	<div class="row">
 		<div class="col-8 col-content">
+			<section class="tsd-panel tsd-comment">
+				<div class="tsd-comment tsd-typography">
+					<div class="lead">
+						<p>This service allows the user to interact with application configuration.</p>
+					</div>
+				</div>
+			</section>
 			<section class="tsd-panel tsd-hierarchy">
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<span class="tsd-signature-type">FaceManagementServiceBase</span>
+						<span class="tsd-signature-type">ConfigServiceBase</span>
 						<ul class="tsd-hierarchy">
 							<li>
 								<span class="target">ConfigService</span>
@@ -95,6 +102,8 @@
 						<section class="tsd-index-section tsd-is-private-protected">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-protected"><a href="_configservice_.configservice.html#hiddenproperties" class="tsd-kind-icon">hidden<wbr>Properties</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-protected"><a href="_configservice_.configservice.html#readonlyproperties" class="tsd-kind-icon">readonly<wbr>Properties</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-overwrite tsd-is-protected"><a href="_configservice_.configservice.html#resources" class="tsd-kind-icon">resources</a></li>
 							</ul>
 						</section>
@@ -103,6 +112,9 @@
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-overwrite"><a href="_configservice_.configservice.html#getconfig" class="tsd-kind-icon">Get<wbr>Config</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-overwrite"><a href="_configservice_.configservice.html#getconfigvalue" class="tsd-kind-icon">Get<wbr>Config<wbr>Value</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-overwrite"><a href="_configservice_.configservice.html#loadconfig" class="tsd-kind-icon">Load<wbr>Config</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-overwrite"><a href="_configservice_.configservice.html#saveconfig" class="tsd-kind-icon">Save<wbr>Config</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-overwrite"><a href="_configservice_.configservice.html#setconfig" class="tsd-kind-icon">Set<wbr>Config</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-overwrite"><a href="_configservice_.configservice.html#setconfigvalue" class="tsd-kind-icon">Set<wbr>Config<wbr>Value</a></li>
 							</ul>
 						</section>
@@ -120,15 +132,22 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Overrides FaceManagementServiceBase.__constructor</p>
+								<p>Overrides ConfigServiceBase.__constructor</p>
 								<ul>
-									<li>Defined in ConfigService.ts:4</li>
+									<li>Defined in <a href="https://github.com/znetstar/face-command-server/blob/07617a8/src/ConfigService.ts#L23">ConfigService.ts:23</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>resources: <a href="_appresources_.appresources.html" class="tsd-signature-type">AppResources</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<div class="lead">
+											<p>Common application resources.</p>
+										</div>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <a href="_configservice_.configservice.html" class="tsd-signature-type">ConfigService</a></h4>
@@ -138,16 +157,51 @@
 			</section>
 			<section class="tsd-panel-group tsd-member-group tsd-is-private-protected">
 				<h2>Properties</h2>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-protected">
+					<a name="hiddenproperties" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagProtected">Protected</span> hidden<wbr>Properties</h3>
+					<div class="tsd-signature tsd-kind-icon">hidden<wbr>Properties<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Set</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> =&nbsp;new Set&lt;string&gt;([&#x27;rpcTransports&#x27;])</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/znetstar/face-command-server/blob/07617a8/src/ConfigService.ts#L21">ConfigService.ts:21</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>A set of properties that will not be sent to the user.</p>
+						</div>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-protected">
+					<a name="readonlyproperties" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagProtected">Protected</span> readonly<wbr>Properties</h3>
+					<div class="tsd-signature tsd-kind-icon">readonly<wbr>Properties<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Set</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> =&nbsp;new Set&lt;string&gt;([&quot;cascadeClassifiers&quot;,&quot;rpcTransports&quot;,&quot;commandTypes&quot;])</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/znetstar/face-command-server/blob/07617a8/src/ConfigService.ts#L12">ConfigService.ts:12</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>A set of properties that cannot be changed by the user.</p>
+						</div>
+					</div>
+				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-overwrite tsd-is-protected">
 					<a name="resources" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagProtected">Protected</span> resources</h3>
 					<div class="tsd-signature tsd-kind-icon">resources<span class="tsd-signature-symbol">:</span> <a href="_appresources_.appresources.html" class="tsd-signature-type">AppResources</a></div>
 					<aside class="tsd-sources">
-						<p>Overrides FaceManagementServiceBase.resources</p>
+						<p>Overrides ConfigServiceBase.resources</p>
 						<ul>
-							<li>Defined in ConfigService.ts:5</li>
+							<li>Defined in <a href="https://github.com/znetstar/face-command-server/blob/07617a8/src/ConfigService.ts#L29">ConfigService.ts:29</a></li>
 						</ul>
 					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Common application resources.</p>
+						</div>
+					</div>
 				</section>
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
@@ -161,11 +215,16 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Overrides FaceManagementServiceBase.GetConfig</p>
+								<p>Overrides ConfigServiceBase.GetConfig</p>
 								<ul>
-									<li>Defined in ConfigService.ts:14</li>
+									<li>Defined in <a href="https://github.com/znetstar/face-command-server/blob/07617a8/src/ConfigService.ts#L58">ConfigService.ts:58</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Retrieves all configuration values.</p>
+								</div>
+							</div>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span></h4>
 						</li>
 					</ul>
@@ -179,18 +238,110 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Overrides FaceManagementServiceBase.GetConfigValue</p>
+								<p>Overrides ConfigServiceBase.GetConfigValue</p>
 								<ul>
-									<li>Defined in ConfigService.ts:6</li>
+									<li>Defined in <a href="https://github.com/znetstar/face-command-server/blob/07617a8/src/ConfigService.ts#L37">ConfigService.ts:37</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Retrieves a configuration value.</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>key: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Key of the value to retrieve.</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-overwrite">
+					<a name="loadconfig" class="tsd-anchor"></a>
+					<h3>Load<wbr>Config</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-overwrite">
+						<li class="tsd-signature tsd-kind-icon">Load<wbr>Config<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<p>Overrides ConfigServiceBase.LoadConfig</p>
+								<ul>
+									<li>Defined in <a href="https://github.com/znetstar/face-command-server/blob/07617a8/src/ConfigService.ts#L97">ConfigService.ts:97</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>If a configuration file has been specified, loads changes from the config file.</p>
+								</div>
+							</div>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-overwrite">
+					<a name="saveconfig" class="tsd-anchor"></a>
+					<h3>Save<wbr>Config</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-overwrite">
+						<li class="tsd-signature tsd-kind-icon">Save<wbr>Config<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<p>Overrides ConfigServiceBase.SaveConfig</p>
+								<ul>
+									<li>Defined in <a href="https://github.com/znetstar/face-command-server/blob/07617a8/src/ConfigService.ts#L90">ConfigService.ts:90</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>If a configuration file has been specified, writes changes to the config file.</p>
+								</div>
+							</div>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-overwrite">
+					<a name="setconfig" class="tsd-anchor"></a>
+					<h3>Set<wbr>Config</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-overwrite">
+						<li class="tsd-signature tsd-kind-icon">Set<wbr>Config<span class="tsd-signature-symbol">(</span>object<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span>, parentKey<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<p>Overrides ConfigServiceBase.SetConfig</p>
+								<ul>
+									<li>Defined in <a href="https://github.com/znetstar/face-command-server/blob/07617a8/src/ConfigService.ts#L73">ConfigService.ts:73</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Applies an object containing properties to the application configuration</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>object: <span class="tsd-signature-type">any</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Object containing properties.</p>
+									</div>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> parentKey: <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Root property to apply changes to. Defaults to the root config object.</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -203,15 +354,23 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Overrides FaceManagementServiceBase.SetConfigValue</p>
+								<p>Overrides ConfigServiceBase.SetConfigValue</p>
 								<ul>
-									<li>Defined in ConfigService.ts:10</li>
+									<li>Defined in <a href="https://github.com/znetstar/face-command-server/blob/07617a8/src/ConfigService.ts#L48">ConfigService.ts:48</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Sets a configuration value.</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>key: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Key of the value to set.</p>
+									</div>
 								</li>
 								<li>
 									<h5>value: <span class="tsd-signature-type">any</span></h5>
@@ -245,6 +404,9 @@
 						<a href="../modules/_databasemodels_.html">"<wbr>Database<wbr>Models"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
+						<a href="../modules/_defaultconfiguration_.html">"<wbr>Default<wbr>Configuration"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
 						<a href="../modules/_detectionservice_.html">"<wbr>Detection<wbr>Service"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
@@ -257,13 +419,13 @@
 						<a href="../modules/_facemanagementservice_.html">"<wbr>Face<wbr>Management<wbr>Service"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
+						<a href="../modules/_logsservice_.html">"<wbr>Logs<wbr>Service"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
 						<a href="../modules/_rpcinterface_.html">"RPCInterface"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
 						<a href="../modules/_webserver_.html">"<wbr>Web<wbr>Server"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="../modules/_default_configuration_.html">"default_<wbr>configuration"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
 						<a href="../modules/_index_.html">"index"</a>
@@ -283,6 +445,12 @@
 							<li class=" tsd-kind-constructor tsd-parent-kind-class tsd-is-overwrite">
 								<a href="_configservice_.configservice.html#constructor" class="tsd-kind-icon">constructor</a>
 							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-protected">
+								<a href="_configservice_.configservice.html#hiddenproperties" class="tsd-kind-icon">hidden<wbr>Properties</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-protected">
+								<a href="_configservice_.configservice.html#readonlyproperties" class="tsd-kind-icon">readonly<wbr>Properties</a>
+							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-overwrite tsd-is-protected">
 								<a href="_configservice_.configservice.html#resources" class="tsd-kind-icon">resources</a>
 							</li>
@@ -291,6 +459,15 @@
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-overwrite">
 								<a href="_configservice_.configservice.html#getconfigvalue" class="tsd-kind-icon">Get<wbr>Config<wbr>Value</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-overwrite">
+								<a href="_configservice_.configservice.html#loadconfig" class="tsd-kind-icon">Load<wbr>Config</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-overwrite">
+								<a href="_configservice_.configservice.html#saveconfig" class="tsd-kind-icon">Save<wbr>Config</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-overwrite">
+								<a href="_configservice_.configservice.html#setconfig" class="tsd-kind-icon">Set<wbr>Config</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-overwrite">
 								<a href="_configservice_.configservice.html#setconfigvalue" class="tsd-kind-icon">Set<wbr>Config<wbr>Value</a>

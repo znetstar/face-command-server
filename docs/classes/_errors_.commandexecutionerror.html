@@ -112,6 +112,7 @@
 							<h3>Methods</h3>
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><a href="_errors_.commandexecutionerror.html#serialize" class="tsd-kind-icon">serialize</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static"><a href="_errors_.commandexecutionerror.html#isservererrorcode" class="tsd-kind-icon">is<wbr>Server<wbr>Error<wbr>Code</a></li>
 							</ul>
 						</section>
 					</div>
@@ -130,7 +131,7 @@
 							<aside class="tsd-sources">
 								<p>Overrides ServerError.__constructor</p>
 								<ul>
-									<li>Defined in <a href="https://github.com/znetstar/face-command-server/blob/ba3b188/src/Errors.ts#L4">Errors.ts:4</a></li>
+									<li>Defined in <a href="https://github.com/znetstar/face-command-server/blob/07617a8/src/Errors.ts#L4">Errors.ts:4</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -153,7 +154,7 @@
 					<aside class="tsd-sources">
 						<p>Inherited from RPCError.code</p>
 						<ul>
-							<li>Defined in /Users/zachary/Projects/face-command-server/node_modules/multi-rpc/lib/Errors.d.ts:5</li>
+							<li>Defined in /Users/zachary/Projects/face-command-server/node_modules/multi-rpc-common/lib/Errors.d.ts:5</li>
 						</ul>
 					</aside>
 				</section>
@@ -165,7 +166,7 @@
 						<p>Inherited from ServerError.data</p>
 						<p>Overrides RPCError.data</p>
 						<ul>
-							<li>Defined in /Users/zachary/Projects/face-command-server/node_modules/multi-rpc/lib/Errors.d.ts:79</li>
+							<li>Defined in /Users/zachary/Projects/face-command-server/node_modules/multi-rpc-common/lib/Errors.d.ts:99</li>
 						</ul>
 					</aside>
 				</section>
@@ -216,7 +217,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/znetstar/face-command-server/blob/ba3b188/src/Errors.ts#L4">Errors.ts:4</a></li>
+									<li>Defined in <a href="https://github.com/znetstar/face-command-server/blob/07617a8/src/Errors.ts#L4">Errors.ts:4</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span></h4>
@@ -237,7 +238,7 @@
 							<aside class="tsd-sources">
 								<p>Inherited from RPCError.serialize</p>
 								<ul>
-									<li>Defined in /Users/zachary/Projects/face-command-server/node_modules/multi-rpc/lib/Errors.d.ts:17</li>
+									<li>Defined in /Users/zachary/Projects/face-command-server/node_modules/multi-rpc-common/lib/Errors.d.ts:17</li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -246,6 +247,38 @@
 								</div>
 							</div>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">any</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static">
+					<a name="isservererrorcode" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagStatic">Static</span> is<wbr>Server<wbr>Error<wbr>Code</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static">
+						<li class="tsd-signature tsd-kind-icon">is<wbr>Server<wbr>Error<wbr>Code<span class="tsd-signature-symbol">(</span>code<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<p>Inherited from ServerError.isServerErrorCode</p>
+								<ul>
+									<li>Defined in /Users/zachary/Projects/face-command-server/node_modules/multi-rpc-common/lib/Errors.d.ts:110</li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Checks if the error code is within the &quot;ServerError&quot; range as defined in the specification.</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>code: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Error code to check.</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -273,6 +306,9 @@
 						<a href="../modules/_databasemodels_.html">"<wbr>Database<wbr>Models"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
+						<a href="../modules/_defaultconfiguration_.html">"<wbr>Default<wbr>Configuration"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
 						<a href="../modules/_detectionservice_.html">"<wbr>Detection<wbr>Service"</a>
 					</li>
 					<li class="current tsd-kind-external-module">
@@ -285,13 +321,13 @@
 						<a href="../modules/_facemanagementservice_.html">"<wbr>Face<wbr>Management<wbr>Service"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
+						<a href="../modules/_logsservice_.html">"<wbr>Logs<wbr>Service"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
 						<a href="../modules/_rpcinterface_.html">"RPCInterface"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
 						<a href="../modules/_webserver_.html">"<wbr>Web<wbr>Server"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="../modules/_default_configuration_.html">"default_<wbr>configuration"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
 						<a href="../modules/_index_.html">"index"</a>
@@ -331,6 +367,9 @@
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited">
 								<a href="_errors_.commandexecutionerror.html#serialize" class="tsd-kind-icon">serialize</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-static">
+								<a href="_errors_.commandexecutionerror.html#isservererrorcode" class="tsd-kind-icon">is<wbr>Server<wbr>Error<wbr>Code</a>
 							</li>
 						</ul>
 					</li>

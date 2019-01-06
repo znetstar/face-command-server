@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>AppResources | face-command-server</title>
+	<title>NonExistantCommandTypeError | face-command-server</title>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -56,13 +56,13 @@
 					<a href="../globals.html">Globals</a>
 				</li>
 				<li>
-					<a href="../modules/_appresources_.html">&quot;AppResources&quot;</a>
+					<a href="../modules/_commandservice_.html">&quot;CommandService&quot;</a>
 				</li>
 				<li>
-					<a href="_appresources_.appresources.html">AppResources</a>
+					<a href="_commandservice_.nonexistantcommandtypeerror.html">NonExistantCommandTypeError</a>
 				</li>
 			</ul>
-			<h1>Class AppResources</h1>
+			<h1>Class NonExistantCommandTypeError</h1>
 		</div>
 	</div>
 </header>
@@ -72,7 +72,7 @@
 			<section class="tsd-panel tsd-comment">
 				<div class="tsd-comment tsd-typography">
 					<div class="lead">
-						<p>This object contains the common resources (database, logger, etc) used by the application.</p>
+						<p>This error is thrown when the user references a command type that doesn&#39;t exist.</p>
 					</div>
 				</div>
 			</section>
@@ -80,14 +80,13 @@
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<span class="target">AppResources</span>
+						<span class="tsd-signature-type">Error</span>
+						<ul class="tsd-hierarchy">
+							<li>
+								<span class="target">NonExistantCommandTypeError</span>
+							</li>
+						</ul>
 					</li>
-				</ul>
-			</section>
-			<section class="tsd-panel">
-				<h3>Implements</h3>
-				<ul class="tsd-hierarchy">
-					<li><span class="tsd-signature-type">IAppResources</span></li>
 				</ul>
 			</section>
 			<section class="tsd-panel-group tsd-index-group">
@@ -97,16 +96,16 @@
 						<section class="tsd-index-section ">
 							<h3>Constructors</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-constructor tsd-parent-kind-class"><a href="_appresources_.appresources.html#constructor" class="tsd-kind-icon">constructor</a></li>
+								<li class="tsd-kind-constructor tsd-parent-kind-class"><a href="_commandservice_.nonexistantcommandtypeerror.html#constructor" class="tsd-kind-icon">constructor</a></li>
 							</ul>
 						</section>
 						<section class="tsd-index-section ">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-class"><a href="_appresources_.appresources.html#database" class="tsd-kind-icon">database</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class"><a href="_appresources_.appresources.html#logger" class="tsd-kind-icon">logger</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class"><a href="_appresources_.appresources.html#nconf" class="tsd-kind-icon">nconf</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class"><a href="_appresources_.appresources.html#rpcserver" class="tsd-kind-icon">rpc<wbr>Server</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><a href="_commandservice_.nonexistantcommandtypeerror.html#message" class="tsd-kind-icon">message</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><a href="_commandservice_.nonexistantcommandtypeerror.html#name" class="tsd-kind-icon">name</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-overwrite tsd-is-inherited"><a href="_commandservice_.nonexistantcommandtypeerror.html#stack" class="tsd-kind-icon">stack</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-static"><a href="_commandservice_.nonexistantcommandtypeerror.html#error" class="tsd-kind-icon">Error</a></li>
 							</ul>
 						</section>
 					</div>
@@ -118,121 +117,71 @@
 					<a name="constructor" class="tsd-anchor"></a>
 					<h3>constructor</h3>
 					<ul class="tsd-signatures tsd-kind-constructor tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">new <wbr>App<wbr>Resources<span class="tsd-signature-symbol">(</span>nconf<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Provider</span>, database<span class="tsd-signature-symbol">: </span><a href="_databasemodels_.databasemodels.html" class="tsd-signature-type">DatabaseModels</a>, logger<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">ILogger</span>, rpcServer<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">RPCServer</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_appresources_.appresources.html" class="tsd-signature-type">AppResources</a></li>
+						<li class="tsd-signature tsd-kind-icon">new <wbr>Non<wbr>Existant<wbr>Command<wbr>Type<wbr>Error<span class="tsd-signature-symbol">(</span>commandType<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_commandservice_.nonexistantcommandtypeerror.html" class="tsd-signature-type">NonExistantCommandTypeError</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/znetstar/face-command-server/blob/07617a8/src/AppResources.ts#L18">AppResources.ts:18</a></li>
+									<li>Defined in <a href="https://github.com/znetstar/face-command-server/blob/07617a8/src/CommandService.ts#L12">CommandService.ts:12</a></li>
 								</ul>
 							</aside>
-							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>Creates an AppResources object.</p>
-								</div>
-							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>nconf: <span class="tsd-signature-type">Provider</span></h5>
-									<div class="tsd-comment tsd-typography">
-										<div class="lead">
-											<p>An Nconf.Provider instance.</p>
-										</div>
-									</div>
-								</li>
-								<li>
-									<h5>database: <a href="_databasemodels_.databasemodels.html" class="tsd-signature-type">DatabaseModels</a></h5>
-									<div class="tsd-comment tsd-typography">
-										<div class="lead">
-											<p>An object containing database models.</p>
-										</div>
-									</div>
-								</li>
-								<li>
-									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> logger: <span class="tsd-signature-type">ILogger</span><span class="tsd-signature-symbol"> =&nbsp;WinstonSilentLogger</span></h5>
-									<div class="tsd-comment tsd-typography">
-										<div class="lead">
-											<p>An optional Winston logger instance. If not provided will use a silent logger, disabling logging.</p>
-										</div>
-									</div>
-								</li>
-								<li>
-									<h5>rpcServer: <span class="tsd-signature-type">RPCServer</span></h5>
-									<div class="tsd-comment tsd-typography">
-										<div class="lead">
-											<p>RPC interface the application willl expose.</p>
-										</div>
-									</div>
+									<h5>commandType: <span class="tsd-signature-type">string</span></h5>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <a href="_appresources_.appresources.html" class="tsd-signature-type">AppResources</a></h4>
+							<h4 class="tsd-returns-title">Returns <a href="_commandservice_.nonexistantcommandtypeerror.html" class="tsd-signature-type">NonExistantCommandTypeError</a></h4>
 						</li>
 					</ul>
 				</section>
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Properties</h2>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
-					<a name="database" class="tsd-anchor"></a>
-					<h3>database</h3>
-					<div class="tsd-signature tsd-kind-icon">database<span class="tsd-signature-symbol">:</span> <a href="_databasemodels_.databasemodels.html" class="tsd-signature-type">DatabaseModels</a></div>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
+					<a name="message" class="tsd-anchor"></a>
+					<h3>message</h3>
+					<div class="tsd-signature tsd-kind-icon">message<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
+						<p>Inherited from Error.message</p>
 						<ul>
-							<li>Defined in <a href="https://github.com/znetstar/face-command-server/blob/07617a8/src/AppResources.ts#L27">AppResources.ts:27</a></li>
+							<li>Defined in /Users/zachary/Projects/face-command-server/node_modules/typescript/lib/lib.es5.d.ts:904</li>
 						</ul>
 					</aside>
-					<div class="tsd-comment tsd-typography">
-						<div class="lead">
-							<p>An object containing database models.</p>
-						</div>
-					</div>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
-					<a name="logger" class="tsd-anchor"></a>
-					<h3>logger</h3>
-					<div class="tsd-signature tsd-kind-icon">logger<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">ILogger</span></div>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
+					<a name="name" class="tsd-anchor"></a>
+					<h3>name</h3>
+					<div class="tsd-signature tsd-kind-icon">name<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
+						<p>Inherited from Error.name</p>
 						<ul>
-							<li>Defined in <a href="https://github.com/znetstar/face-command-server/blob/07617a8/src/AppResources.ts#L27">AppResources.ts:27</a></li>
+							<li>Defined in /Users/zachary/Projects/face-command-server/node_modules/typescript/lib/lib.es5.d.ts:903</li>
 						</ul>
 					</aside>
-					<div class="tsd-comment tsd-typography">
-						<div class="lead">
-							<p>An optional Winston logger instance. If not provided will use a silent logger, disabling logging.</p>
-						</div>
-					</div>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
-					<a name="nconf" class="tsd-anchor"></a>
-					<h3>nconf</h3>
-					<div class="tsd-signature tsd-kind-icon">nconf<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Provider</span></div>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-overwrite tsd-is-inherited">
+					<a name="stack" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> stack</h3>
+					<div class="tsd-signature tsd-kind-icon">stack<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
+						<p>Inherited from Error.stack</p>
+						<p>Overrides Error.stack</p>
 						<ul>
-							<li>Defined in <a href="https://github.com/znetstar/face-command-server/blob/07617a8/src/AppResources.ts#L27">AppResources.ts:27</a></li>
+							<li>Defined in /Users/zachary/Projects/face-command-server/node_modules/typescript/lib/lib.es5.d.ts:905</li>
 						</ul>
 					</aside>
-					<div class="tsd-comment tsd-typography">
-						<div class="lead">
-							<p>An Nconf.Provider instance.</p>
-						</div>
-					</div>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
-					<a name="rpcserver" class="tsd-anchor"></a>
-					<h3>rpc<wbr>Server</h3>
-					<div class="tsd-signature tsd-kind-icon">rpc<wbr>Server<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">RPCServer</span></div>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-static">
+					<a name="error" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagStatic">Static</span> Error</h3>
+					<div class="tsd-signature tsd-kind-icon">Error<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">ErrorConstructor</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/znetstar/face-command-server/blob/07617a8/src/AppResources.ts#L27">AppResources.ts:27</a></li>
+							<li>Defined in /Users/zachary/Projects/face-command-server/node_modules/typescript/lib/lib.es5.d.ts:914</li>
 						</ul>
 					</aside>
-					<div class="tsd-comment tsd-typography">
-						<div class="lead">
-							<p>RPC interface the application willl expose.</p>
-						</div>
-					</div>
 				</section>
 			</section>
 		</div>
@@ -242,10 +191,10 @@
 					<li class="globals  ">
 						<a href="../globals.html"><em>Globals</em></a>
 					</li>
-					<li class="current tsd-kind-external-module">
+					<li class=" tsd-kind-external-module">
 						<a href="../modules/_appresources_.html">"<wbr>App<wbr>Resources"</a>
 					</li>
-					<li class=" tsd-kind-external-module">
+					<li class="current tsd-kind-external-module">
 						<a href="../modules/_commandservice_.html">"<wbr>Command<wbr>Service"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
@@ -291,32 +240,41 @@
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
+					<li class=" tsd-kind-class tsd-parent-kind-external-module">
+						<a href="_commandservice_.commandservice.html" class="tsd-kind-icon">Command<wbr>Service</a>
+					</li>
+					<li class=" tsd-kind-class tsd-parent-kind-external-module">
+						<a href="_commandservice_.facesrecognizedsetininvalidrunconditionerror.html" class="tsd-kind-icon">Faces<wbr>Recognized<wbr>Set<wbr>InInvalid<wbr>Run<wbr>Condition<wbr>Error</a>
+					</li>
+					<li class=" tsd-kind-class tsd-parent-kind-external-module">
+						<a href="_commandservice_.nonexistantcommanderror.html" class="tsd-kind-icon">Non<wbr>Existant<wbr>Command<wbr>Error</a>
+					</li>
 				</ul>
 				<ul class="current">
 					<li class="current tsd-kind-class tsd-parent-kind-external-module">
-						<a href="_appresources_.appresources.html" class="tsd-kind-icon">App<wbr>Resources</a>
+						<a href="_commandservice_.nonexistantcommandtypeerror.html" class="tsd-kind-icon">Non<wbr>Existant<wbr>Command<wbr>Type<wbr>Error</a>
 						<ul>
 							<li class=" tsd-kind-constructor tsd-parent-kind-class">
-								<a href="_appresources_.appresources.html#constructor" class="tsd-kind-icon">constructor</a>
+								<a href="_commandservice_.nonexistantcommandtypeerror.html#constructor" class="tsd-kind-icon">constructor</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-class">
-								<a href="_appresources_.appresources.html#database" class="tsd-kind-icon">database</a>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
+								<a href="_commandservice_.nonexistantcommandtypeerror.html#message" class="tsd-kind-icon">message</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-class">
-								<a href="_appresources_.appresources.html#logger" class="tsd-kind-icon">logger</a>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
+								<a href="_commandservice_.nonexistantcommandtypeerror.html#name" class="tsd-kind-icon">name</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-class">
-								<a href="_appresources_.appresources.html#nconf" class="tsd-kind-icon">nconf</a>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-overwrite tsd-is-inherited">
+								<a href="_commandservice_.nonexistantcommandtypeerror.html#stack" class="tsd-kind-icon">stack</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-class">
-								<a href="_appresources_.appresources.html#rpcserver" class="tsd-kind-icon">rpc<wbr>Server</a>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-static">
+								<a href="_commandservice_.nonexistantcommandtypeerror.html#error" class="tsd-kind-icon">Error</a>
 							</li>
 						</ul>
 					</li>
 				</ul>
 				<ul class="after-current">
-					<li class=" tsd-kind-variable tsd-parent-kind-external-module tsd-is-not-exported">
-						<a href="../modules/_appresources_.html#winstonsilentlogger" class="tsd-kind-icon">Winston<wbr>Silent<wbr>Logger</a>
+					<li class=" tsd-kind-class tsd-parent-kind-external-module">
+						<a href="_commandservice_.runconditionexistserror.html" class="tsd-kind-icon">Run<wbr>Condition<wbr>Exists<wbr>Error</a>
 					</li>
 				</ul>
 			</nav>

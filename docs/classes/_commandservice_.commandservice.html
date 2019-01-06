@@ -69,6 +69,13 @@
 <div class="container container-main">
 	<div class="row">
 		<div class="col-8 col-content">
+			<section class="tsd-panel tsd-comment">
+				<div class="tsd-comment tsd-typography">
+					<div class="lead">
+						<p>A service that runs commands based on changes in the detection status.</p>
+					</div>
+				</div>
+			</section>
 			<section class="tsd-panel tsd-hierarchy">
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
@@ -110,6 +117,8 @@
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-overwrite"><a href="_commandservice_.commandservice.html#getcommands" class="tsd-kind-icon">Get<wbr>Commands</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_commandservice_.commandservice.html#onstatuschange" class="tsd-kind-icon">On<wbr>Status<wbr>Change</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_commandservice_.commandservice.html#rpc_addcommand" class="tsd-kind-icon">RPC_<wbr><wbr>Add<wbr>Command</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_commandservice_.commandservice.html#rpc_getcommand" class="tsd-kind-icon">RPC_<wbr><wbr>Get<wbr>Command</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_commandservice_.commandservice.html#rpc_getcommands" class="tsd-kind-icon">RPC_<wbr><wbr>Get<wbr>Commands</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-overwrite"><a href="_commandservice_.commandservice.html#removecommand" class="tsd-kind-icon">Remove<wbr>Command</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_commandservice_.commandservice.html#runcommand" class="tsd-kind-icon">Run<wbr>Command</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-overwrite"><a href="_commandservice_.commandservice.html#updatecommand" class="tsd-kind-icon">Update<wbr>Command</a></li>
@@ -131,16 +140,28 @@
 							<aside class="tsd-sources">
 								<p>Overrides CommandServiceBase.__constructor</p>
 								<ul>
-									<li>Defined in <a href="https://github.com/znetstar/face-command-server/blob/ba3b188/src/CommandService.ts#L28">CommandService.ts:28</a></li>
+									<li>Defined in <a href="https://github.com/znetstar/face-command-server/blob/07617a8/src/CommandService.ts#L48">CommandService.ts:48</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>resources: <a href="_appresources_.appresources.html" class="tsd-signature-type">AppResources</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<div class="lead">
+											<p>Common application resources.</p>
+										</div>
+									</div>
 								</li>
 								<li>
 									<h5>detection: <a href="_detectionservice_.detectionservice.html" class="tsd-signature-type">DetectionService</a></h5>
+									<div class="tsd-comment tsd-typography">
+										<div class="lead">
+											<p>Detection service to monitor for changes.</p>
+										</div>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <a href="_commandservice_.commandservice.html" class="tsd-signature-type">CommandService</a></h4>
@@ -156,9 +177,14 @@
 					<div class="tsd-signature tsd-kind-icon">detection<span class="tsd-signature-symbol">:</span> <a href="_detectionservice_.detectionservice.html" class="tsd-signature-type">DetectionService</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/znetstar/face-command-server/blob/ba3b188/src/CommandService.ts#L29">CommandService.ts:29</a></li>
+							<li>Defined in <a href="https://github.com/znetstar/face-command-server/blob/07617a8/src/CommandService.ts#L54">CommandService.ts:54</a></li>
 						</ul>
 					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Detection service to monitor for changes.</p>
+						</div>
+					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-overwrite tsd-is-protected">
 					<a name="resources" class="tsd-anchor"></a>
@@ -167,9 +193,14 @@
 					<aside class="tsd-sources">
 						<p>Overrides CommandServiceBase.resources</p>
 						<ul>
-							<li>Defined in <a href="https://github.com/znetstar/face-command-server/blob/ba3b188/src/CommandService.ts#L29">CommandService.ts:29</a></li>
+							<li>Defined in <a href="https://github.com/znetstar/face-command-server/blob/07617a8/src/CommandService.ts#L54">CommandService.ts:54</a></li>
 						</ul>
 					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Common application resources.</p>
+						</div>
+					</div>
 				</section>
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
@@ -185,22 +216,39 @@
 							<aside class="tsd-sources">
 								<p>Overrides CommandServiceBase.AddCommand</p>
 								<ul>
-									<li>Defined in <a href="https://github.com/znetstar/face-command-server/blob/ba3b188/src/CommandService.ts#L65">CommandService.ts:65</a></li>
+									<li>Defined in <a href="https://github.com/znetstar/face-command-server/blob/07617a8/src/CommandService.ts#L119">CommandService.ts:119</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Adds a command that will run when conditions are met to the database.</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>inputCommandType: <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">Constructible</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">CommandTypeBase</span><span class="tsd-signature-symbol">&gt;</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Either the command type class constructor or the name of the class.</p>
+									</div>
 								</li>
 								<li>
 									<h5>runConditions: <span class="tsd-signature-type">RunCondition</span><span class="tsd-signature-symbol">[]</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Conditions needed for the command to run.</p>
+									</div>
 								</li>
 								<li>
 									<h5>name: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Friendly name of the command.</p>
+									</div>
 								</li>
 								<li>
 									<h5><span class="tsd-flag ts-flagOptional">Optional</span> data: <span class="tsd-signature-type">any</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Arbitrary data to accompany the command.</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Command</span><span class="tsd-signature-symbol">&gt;</span></h4>
@@ -217,13 +265,21 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/znetstar/face-command-server/blob/ba3b188/src/CommandService.ts#L39">CommandService.ts:39</a></li>
+									<li>Defined in <a href="https://github.com/znetstar/face-command-server/blob/07617a8/src/CommandService.ts#L72">CommandService.ts:72</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Retrieves a <code>CommandType</code> based on the its class-name.</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>name: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Class name of the command type to retrieve.</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Constructible</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">CommandTypeBase</span><span class="tsd-signature-symbol">&gt;</span></h4>
@@ -241,13 +297,21 @@
 							<aside class="tsd-sources">
 								<p>Overrides CommandServiceBase.GetCommand</p>
 								<ul>
-									<li>Defined in <a href="https://github.com/znetstar/face-command-server/blob/ba3b188/src/CommandService.ts#L99">CommandService.ts:99</a></li>
+									<li>Defined in <a href="https://github.com/znetstar/face-command-server/blob/07617a8/src/CommandService.ts#L161">CommandService.ts:161</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Retrieves a command from the database by its ID.</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>id: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>ID of the command to retrieve.</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Command</span><span class="tsd-signature-symbol">&gt;</span></h4>
@@ -264,9 +328,14 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/znetstar/face-command-server/blob/ba3b188/src/CommandService.ts#L48">CommandService.ts:48</a></li>
+									<li>Defined in <a href="https://github.com/znetstar/face-command-server/blob/07617a8/src/CommandService.ts#L84">CommandService.ts:84</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Retrieves the class name of all available command types.</p>
+								</div>
+							</div>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span></h4>
 						</li>
 					</ul>
@@ -281,9 +350,15 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/znetstar/face-command-server/blob/ba3b188/src/CommandService.ts#L34">CommandService.ts:34</a></li>
+									<li>Defined in <a href="https://github.com/znetstar/face-command-server/blob/07617a8/src/CommandService.ts#L63">CommandService.ts:63</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Retrieves all of the command types available.
+									Paths to the command type should be added to the &quot;commandTypes&quot; config property.</p>
+								</div>
+							</div>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Constructible</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">CommandTypeBase</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">[]</span></h4>
 						</li>
 					</ul>
@@ -299,9 +374,14 @@
 							<aside class="tsd-sources">
 								<p>Overrides CommandServiceBase.GetCommands</p>
 								<ul>
-									<li>Defined in <a href="https://github.com/znetstar/face-command-server/blob/ba3b188/src/CommandService.ts#L103">CommandService.ts:103</a></li>
+									<li>Defined in <a href="https://github.com/znetstar/face-command-server/blob/07617a8/src/CommandService.ts#L184">CommandService.ts:184</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Retrieves all commands from the database.</p>
+								</div>
+							</div>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Command</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></h4>
 						</li>
 					</ul>
@@ -316,13 +396,21 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/znetstar/face-command-server/blob/ba3b188/src/CommandService.ts#L183">CommandService.ts:183</a></li>
+									<li>Defined in <a href="https://github.com/znetstar/face-command-server/blob/07617a8/src/CommandService.ts#L310">CommandService.ts:310</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Is called when a status change occurs.</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>status: <span class="tsd-signature-type">Status</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The new status.</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></h4>
@@ -339,25 +427,95 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/znetstar/face-command-server/blob/ba3b188/src/CommandService.ts#L52">CommandService.ts:52</a></li>
+									<li>Defined in <a href="https://github.com/znetstar/face-command-server/blob/07617a8/src/CommandService.ts#L95">CommandService.ts:95</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Is equivalent to <code>CommandService.AddCommand</code> execpt the elements in the <code>facesToRecognize</code> property of elements in the <code>runConditions</code> argument are face IDs instead of <code>Face</code> objects.</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>commandTypeName: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Class name of the command type.</p>
+									</div>
 								</li>
 								<li>
 									<h5>runConditions: <span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">[]</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Array of conditions that need to be met for the command to run</p>
+									</div>
 								</li>
 								<li>
 									<h5>name: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Friendly name for the command.</p>
+									</div>
 								</li>
 								<li>
 									<h5><span class="tsd-flag ts-flagOptional">Optional</span> data: <span class="tsd-signature-type">any</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Arbitrary data to accompany the command.</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Command</span><span class="tsd-signature-symbol">&gt;</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="rpc_getcommand" class="tsd-anchor"></a>
+					<h3>RPC_<wbr><wbr>Get<wbr>Command</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">RPC_<wbr><wbr>Get<wbr>Command<span class="tsd-signature-symbol">(</span>id<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Command</span><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/znetstar/face-command-server/blob/07617a8/src/CommandService.ts#L173">CommandService.ts:173</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Retrieves a command from the database, but ensures the type returned is a string.</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>id: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>ID of the command to retrieve.</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Command</span><span class="tsd-signature-symbol">&gt;</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="rpc_getcommands" class="tsd-anchor"></a>
+					<h3>RPC_<wbr><wbr>Get<wbr>Commands</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">RPC_<wbr><wbr>Get<wbr>Commands<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Command</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/znetstar/face-command-server/blob/07617a8/src/CommandService.ts#L194">CommandService.ts:194</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Retrieves all commands from the database , but ensures the types returned are strings.</p>
+								</div>
+							</div>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Command</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">&gt;</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -372,13 +530,21 @@
 							<aside class="tsd-sources">
 								<p>Overrides CommandServiceBase.RemoveCommand</p>
 								<ul>
-									<li>Defined in <a href="https://github.com/znetstar/face-command-server/blob/ba3b188/src/CommandService.ts#L158">CommandService.ts:158</a></li>
+									<li>Defined in <a href="https://github.com/znetstar/face-command-server/blob/07617a8/src/CommandService.ts#L274">CommandService.ts:274</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Removes a command from the database by its ID.</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>id: <span class="tsd-signature-type">number</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>ID of the command to remove</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></h4>
@@ -395,16 +561,27 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/znetstar/face-command-server/blob/ba3b188/src/CommandService.ts#L168">CommandService.ts:168</a></li>
+									<li>Defined in <a href="https://github.com/znetstar/face-command-server/blob/07617a8/src/CommandService.ts#L289">CommandService.ts:289</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Executes a command.</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>command: <span class="tsd-signature-type">Command</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Command to execute.</p>
+									</div>
 								</li>
 								<li>
 									<h5>status: <span class="tsd-signature-type">Status</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Status that caused the command to be executed.</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span></h4>
@@ -422,13 +599,21 @@
 							<aside class="tsd-sources">
 								<p>Overrides CommandServiceBase.UpdateCommand</p>
 								<ul>
-									<li>Defined in <a href="https://github.com/znetstar/face-command-server/blob/ba3b188/src/CommandService.ts#L110">CommandService.ts:110</a></li>
+									<li>Defined in <a href="https://github.com/znetstar/face-command-server/blob/07617a8/src/CommandService.ts#L213">CommandService.ts:213</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Updates an existing command with inputted properties.</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
 									<h5>commandDelta: <span class="tsd-signature-type">Command</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>Properties to update the command with.</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Command</span><span class="tsd-signature-symbol">&gt;</span></h4>
@@ -459,6 +644,9 @@
 						<a href="../modules/_databasemodels_.html">"<wbr>Database<wbr>Models"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
+						<a href="../modules/_defaultconfiguration_.html">"<wbr>Default<wbr>Configuration"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
 						<a href="../modules/_detectionservice_.html">"<wbr>Detection<wbr>Service"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
@@ -471,13 +659,13 @@
 						<a href="../modules/_facemanagementservice_.html">"<wbr>Face<wbr>Management<wbr>Service"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
+						<a href="../modules/_logsservice_.html">"<wbr>Logs<wbr>Service"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
 						<a href="../modules/_rpcinterface_.html">"RPCInterface"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
 						<a href="../modules/_webserver_.html">"<wbr>Web<wbr>Server"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="../modules/_default_configuration_.html">"default_<wbr>configuration"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
 						<a href="../modules/_index_.html">"index"</a>
@@ -527,6 +715,12 @@
 							<li class=" tsd-kind-method tsd-parent-kind-class">
 								<a href="_commandservice_.commandservice.html#rpc_addcommand" class="tsd-kind-icon">RPC_<wbr><wbr>Add<wbr>Command</a>
 							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="_commandservice_.commandservice.html#rpc_getcommand" class="tsd-kind-icon">RPC_<wbr><wbr>Get<wbr>Command</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="_commandservice_.commandservice.html#rpc_getcommands" class="tsd-kind-icon">RPC_<wbr><wbr>Get<wbr>Commands</a>
+							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-overwrite">
 								<a href="_commandservice_.commandservice.html#removecommand" class="tsd-kind-icon">Remove<wbr>Command</a>
 							</li>
@@ -541,13 +735,16 @@
 				</ul>
 				<ul class="after-current">
 					<li class=" tsd-kind-class tsd-parent-kind-external-module">
-						<a href="_commandservice_.facesrecognizedsetininvalidruncondition.html" class="tsd-kind-icon">Faces<wbr>Recognized<wbr>Set<wbr>InInvalid<wbr>Run<wbr>Condition</a>
+						<a href="_commandservice_.facesrecognizedsetininvalidrunconditionerror.html" class="tsd-kind-icon">Faces<wbr>Recognized<wbr>Set<wbr>InInvalid<wbr>Run<wbr>Condition<wbr>Error</a>
 					</li>
 					<li class=" tsd-kind-class tsd-parent-kind-external-module">
-						<a href="_commandservice_.nonexistantcommandexception.html" class="tsd-kind-icon">Non<wbr>Existant<wbr>Command<wbr>Exception</a>
+						<a href="_commandservice_.nonexistantcommanderror.html" class="tsd-kind-icon">Non<wbr>Existant<wbr>Command<wbr>Error</a>
 					</li>
 					<li class=" tsd-kind-class tsd-parent-kind-external-module">
-						<a href="_commandservice_.runconditionexistsexception.html" class="tsd-kind-icon">Run<wbr>Condition<wbr>Exists<wbr>Exception</a>
+						<a href="_commandservice_.nonexistantcommandtypeerror.html" class="tsd-kind-icon">Non<wbr>Existant<wbr>Command<wbr>Type<wbr>Error</a>
+					</li>
+					<li class=" tsd-kind-class tsd-parent-kind-external-module">
+						<a href="_commandservice_.runconditionexistserror.html" class="tsd-kind-icon">Run<wbr>Condition<wbr>Exists<wbr>Error</a>
 					</li>
 				</ul>
 			</nav>

@@ -87,9 +87,10 @@
 								<li class="tsd-kind-constructor tsd-parent-kind-class"><a href="_facecapture_.facecapture.html#constructor" class="tsd-kind-icon">constructor</a></li>
 							</ul>
 						</section>
-						<section class="tsd-index-section tsd-is-private-protected">
+						<section class="tsd-index-section ">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="_facecapture_.facecapture.html#capturesource" class="tsd-kind-icon">capture<wbr>Source</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="_facecapture_.facecapture.html#faceclassifier" class="tsd-kind-icon">face<wbr>Classifier</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-protected"><a href="_facecapture_.facecapture.html#resources" class="tsd-kind-icon">resources</a></li>
 							</ul>
@@ -99,9 +100,11 @@
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_facecapture_.facecapture.html#facefromimage" class="tsd-kind-icon">Face<wbr>From<wbr>Image</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_facecapture_.facecapture.html#facesfromimage" class="tsd-kind-icon">Faces<wbr>From<wbr>Image</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_facecapture_.facecapture.html#getbrightness" class="tsd-kind-icon">Get<wbr>Brightness</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_facecapture_.facecapture.html#imagefromcamera" class="tsd-kind-icon">Image<wbr>From<wbr>Camera</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_facecapture_.facecapture.html#preprocessface" class="tsd-kind-icon">Preprocess<wbr>Face</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_facecapture_.facecapture.html#resizeface" class="tsd-kind-icon">Resize<wbr>Face</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_facecapture_.facecapture.html#stabilizecontrast" class="tsd-kind-icon">Stabilize<wbr>Contrast</a></li>
 							</ul>
 						</section>
 					</div>
@@ -113,13 +116,13 @@
 					<a name="constructor" class="tsd-anchor"></a>
 					<h3>constructor</h3>
 					<ul class="tsd-signatures tsd-kind-constructor tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">new <wbr>Face<wbr>Capture<span class="tsd-signature-symbol">(</span>resources<span class="tsd-signature-symbol">: </span><a href="_appresources_.appresources.html" class="tsd-signature-type">AppResources</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_facecapture_.facecapture.html" class="tsd-signature-type">FaceCapture</a></li>
+						<li class="tsd-signature tsd-kind-icon">new <wbr>Face<wbr>Capture<span class="tsd-signature-symbol">(</span>resources<span class="tsd-signature-symbol">: </span><a href="_appresources_.appresources.html" class="tsd-signature-type">AppResources</a>, devicePort<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_facecapture_.facecapture.html" class="tsd-signature-type">FaceCapture</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/znetstar/face-command-server/blob/ba3b188/src/FaceCapture.ts#L29">FaceCapture.ts:29</a></li>
+									<li>Defined in <a href="https://github.com/znetstar/face-command-server/blob/07617a8/src/FaceCapture.ts#L44">FaceCapture.ts:44</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -127,21 +130,34 @@
 								<li>
 									<h5>resources: <a href="_appresources_.appresources.html" class="tsd-signature-type">AppResources</a></h5>
 								</li>
+								<li>
+									<h5>devicePort: <span class="tsd-signature-type">number</span></h5>
+								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <a href="_facecapture_.facecapture.html" class="tsd-signature-type">FaceCapture</a></h4>
 						</li>
 					</ul>
 				</section>
 			</section>
-			<section class="tsd-panel-group tsd-member-group tsd-is-private-protected">
+			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Properties</h2>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+					<a name="capturesource" class="tsd-anchor"></a>
+					<h3>capture<wbr>Source</h3>
+					<div class="tsd-signature tsd-kind-icon">capture<wbr>Source<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">VideoCapture</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/znetstar/face-command-server/blob/07617a8/src/FaceCapture.ts#L44">FaceCapture.ts:44</a></li>
+						</ul>
+					</aside>
+				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-private">
 					<a name="faceclassifier" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagPrivate">Private</span> face<wbr>Classifier</h3>
-					<div class="tsd-signature tsd-kind-icon">face<wbr>Classifier<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">CascadeClassifier</span><span class="tsd-signature-symbol"> =&nbsp;new CascadeClassifier(HAAR_FRONTALFACE_ALT2)</span></div>
+					<div class="tsd-signature tsd-kind-icon">face<wbr>Classifier<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">CascadeClassifier</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/znetstar/face-command-server/blob/ba3b188/src/FaceCapture.ts#L34">FaceCapture.ts:34</a></li>
+							<li>Defined in <a href="https://github.com/znetstar/face-command-server/blob/07617a8/src/FaceCapture.ts#L59">FaceCapture.ts:59</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -151,7 +167,7 @@
 					<div class="tsd-signature tsd-kind-icon">resources<span class="tsd-signature-symbol">:</span> <a href="_appresources_.appresources.html" class="tsd-signature-type">AppResources</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/znetstar/face-command-server/blob/ba3b188/src/FaceCapture.ts#L30">FaceCapture.ts:30</a></li>
+							<li>Defined in <a href="https://github.com/znetstar/face-command-server/blob/07617a8/src/FaceCapture.ts#L46">FaceCapture.ts:46</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -168,7 +184,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/znetstar/face-command-server/blob/ba3b188/src/FaceCapture.ts#L54">FaceCapture.ts:54</a></li>
+									<li>Defined in <a href="https://github.com/znetstar/face-command-server/blob/07617a8/src/FaceCapture.ts#L77">FaceCapture.ts:77</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -207,7 +223,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/znetstar/face-command-server/blob/ba3b188/src/FaceCapture.ts#L41">FaceCapture.ts:41</a></li>
+									<li>Defined in <a href="https://github.com/znetstar/face-command-server/blob/07617a8/src/FaceCapture.ts#L66">FaceCapture.ts:66</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -232,16 +248,39 @@
 					</ul>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
-					<a name="imagefromcamera" class="tsd-anchor"></a>
-					<h3>Image<wbr>From<wbr>Camera</h3>
+					<a name="getbrightness" class="tsd-anchor"></a>
+					<h3>Get<wbr>Brightness</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">Image<wbr>From<wbr>Camera<span class="tsd-signature-symbol">(</span>devicePort<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Mat</span><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">Get<wbr>Brightness<span class="tsd-signature-symbol">(</span>image<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Mat</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/znetstar/face-command-server/blob/ba3b188/src/FaceCapture.ts#L94">FaceCapture.ts:94</a></li>
+									<li>Defined in <a href="https://github.com/znetstar/face-command-server/blob/07617a8/src/FaceCapture.ts#L100">FaceCapture.ts:100</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>image: <span class="tsd-signature-type">Mat</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">&gt;</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="imagefromcamera" class="tsd-anchor"></a>
+					<h3>Image<wbr>From<wbr>Camera</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">Image<wbr>From<wbr>Camera<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Mat</span><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/znetstar/face-command-server/blob/07617a8/src/FaceCapture.ts#L138">FaceCapture.ts:138</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -249,15 +288,6 @@
 									<p>Takes a frame from the capture source.</p>
 								</div>
 							</div>
-							<h4 class="tsd-parameters-title">Parameters</h4>
-							<ul class="tsd-parameters">
-								<li>
-									<h5>devicePort: <span class="tsd-signature-type">number</span></h5>
-									<div class="tsd-comment tsd-typography">
-										<p>Which device to capture from.</p>
-									</div>
-								</li>
-							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Mat</span><span class="tsd-signature-symbol">&gt;</span></h4>
 							<ul>
 								<li>A single image from the capture source.</li>
@@ -275,7 +305,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/znetstar/face-command-server/blob/ba3b188/src/FaceCapture.ts#L82">FaceCapture.ts:82</a></li>
+									<li>Defined in <a href="https://github.com/znetstar/face-command-server/blob/07617a8/src/FaceCapture.ts#L117">FaceCapture.ts:117</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -309,7 +339,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/znetstar/face-command-server/blob/ba3b188/src/FaceCapture.ts#L70">FaceCapture.ts:70</a></li>
+									<li>Defined in <a href="https://github.com/znetstar/face-command-server/blob/07617a8/src/FaceCapture.ts#L93">FaceCapture.ts:93</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -324,6 +354,29 @@
 									<div class="tsd-comment tsd-typography">
 										<p>Face to resize.</p>
 									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Mat</span><span class="tsd-signature-symbol">&gt;</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="stabilizecontrast" class="tsd-anchor"></a>
+					<h3>Stabilize<wbr>Contrast</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">Stabilize<wbr>Contrast<span class="tsd-signature-symbol">(</span>image<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Mat</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Mat</span><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/znetstar/face-command-server/blob/07617a8/src/FaceCapture.ts#L106">FaceCapture.ts:106</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>image: <span class="tsd-signature-type">Mat</span></h5>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Mat</span><span class="tsd-signature-symbol">&gt;</span></h4>
@@ -354,6 +407,9 @@
 						<a href="../modules/_databasemodels_.html">"<wbr>Database<wbr>Models"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
+						<a href="../modules/_defaultconfiguration_.html">"<wbr>Default<wbr>Configuration"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
 						<a href="../modules/_detectionservice_.html">"<wbr>Detection<wbr>Service"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
@@ -366,13 +422,13 @@
 						<a href="../modules/_facemanagementservice_.html">"<wbr>Face<wbr>Management<wbr>Service"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
+						<a href="../modules/_logsservice_.html">"<wbr>Logs<wbr>Service"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
 						<a href="../modules/_rpcinterface_.html">"RPCInterface"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
 						<a href="../modules/_webserver_.html">"<wbr>Web<wbr>Server"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="../modules/_default_configuration_.html">"default_<wbr>configuration"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
 						<a href="../modules/_index_.html">"index"</a>
@@ -384,6 +440,9 @@
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
+					<li class=" tsd-kind-class tsd-parent-kind-external-module">
+						<a href="_facecapture_.classifierdoesnotexisterror.html" class="tsd-kind-icon">Classifier<wbr>Does<wbr>Not<wbr>Exist<wbr>Error</a>
+					</li>
 				</ul>
 				<ul class="current">
 					<li class="current tsd-kind-class tsd-parent-kind-external-module">
@@ -391,6 +450,9 @@
 						<ul>
 							<li class=" tsd-kind-constructor tsd-parent-kind-class">
 								<a href="_facecapture_.facecapture.html#constructor" class="tsd-kind-icon">constructor</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class">
+								<a href="_facecapture_.facecapture.html#capturesource" class="tsd-kind-icon">capture<wbr>Source</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-private">
 								<a href="_facecapture_.facecapture.html#faceclassifier" class="tsd-kind-icon">face<wbr>Classifier</a>
@@ -405,6 +467,9 @@
 								<a href="_facecapture_.facecapture.html#facesfromimage" class="tsd-kind-icon">Faces<wbr>From<wbr>Image</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="_facecapture_.facecapture.html#getbrightness" class="tsd-kind-icon">Get<wbr>Brightness</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
 								<a href="_facecapture_.facecapture.html#imagefromcamera" class="tsd-kind-icon">Image<wbr>From<wbr>Camera</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
@@ -413,10 +478,16 @@
 							<li class=" tsd-kind-method tsd-parent-kind-class">
 								<a href="_facecapture_.facecapture.html#resizeface" class="tsd-kind-icon">Resize<wbr>Face</a>
 							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="_facecapture_.facecapture.html#stabilizecontrast" class="tsd-kind-icon">Stabilize<wbr>Contrast</a>
+							</li>
 						</ul>
 					</li>
 				</ul>
 				<ul class="after-current">
+					<li class=" tsd-kind-class tsd-parent-kind-external-module">
+						<a href="_facecapture_.imagebelowbrightnessthresholderror.html" class="tsd-kind-icon">Image<wbr>Below<wbr>Brightness<wbr>Threshold<wbr>Error</a>
+					</li>
 					<li class=" tsd-kind-class tsd-parent-kind-external-module">
 						<a href="_facecapture_.nofacesdetectederror.html" class="tsd-kind-icon">No<wbr>Faces<wbr>Detected<wbr>Error</a>
 					</li>

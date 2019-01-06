@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>AppServices | face-command-server</title>
+	<title>RunConditionExistsError | face-command-server</title>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -56,24 +56,36 @@
 					<a href="../globals.html">Globals</a>
 				</li>
 				<li>
-					<a href="../modules/_appresources_.html">&quot;AppResources&quot;</a>
+					<a href="../modules/_commandservice_.html">&quot;CommandService&quot;</a>
 				</li>
 				<li>
-					<a href="_appresources_.appservices.html">AppServices</a>
+					<a href="_commandservice_.runconditionexistserror.html">RunConditionExistsError</a>
 				</li>
 			</ul>
-			<h1>Class AppServices</h1>
+			<h1>Class RunConditionExistsError</h1>
 		</div>
 	</div>
 </header>
 <div class="container container-main">
 	<div class="row">
 		<div class="col-8 col-content">
+			<section class="tsd-panel tsd-comment">
+				<div class="tsd-comment tsd-typography">
+					<div class="lead">
+						<p>This error is thrown when the user attempts to add a RunCondition that already exists to a command.</p>
+					</div>
+				</div>
+			</section>
 			<section class="tsd-panel tsd-hierarchy">
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<span class="target">AppServices</span>
+						<span class="tsd-signature-type">Error</span>
+						<ul class="tsd-hierarchy">
+							<li>
+								<span class="target">RunConditionExistsError</span>
+							</li>
+						</ul>
 					</li>
 				</ul>
 			</section>
@@ -84,17 +96,16 @@
 						<section class="tsd-index-section ">
 							<h3>Constructors</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-constructor tsd-parent-kind-class"><a href="_appresources_.appservices.html#constructor" class="tsd-kind-icon">constructor</a></li>
+								<li class="tsd-kind-constructor tsd-parent-kind-class"><a href="_commandservice_.runconditionexistserror.html#constructor" class="tsd-kind-icon">constructor</a></li>
 							</ul>
 						</section>
 						<section class="tsd-index-section ">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-class"><a href="_appresources_.appservices.html#commandservice" class="tsd-kind-icon">command<wbr>Service</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class"><a href="_appresources_.appservices.html#configservice" class="tsd-kind-icon">config<wbr>Service</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class"><a href="_appresources_.appservices.html#detectionservice" class="tsd-kind-icon">detection<wbr>Service</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class"><a href="_appresources_.appservices.html#facecapture" class="tsd-kind-icon">face<wbr>Capture</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class"><a href="_appresources_.appservices.html#facemanagementservice" class="tsd-kind-icon">face<wbr>Management<wbr>Service</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><a href="_commandservice_.runconditionexistserror.html#message" class="tsd-kind-icon">message</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><a href="_commandservice_.runconditionexistserror.html#name" class="tsd-kind-icon">name</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-overwrite tsd-is-inherited"><a href="_commandservice_.runconditionexistserror.html#stack" class="tsd-kind-icon">stack</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-static"><a href="_commandservice_.runconditionexistserror.html#error" class="tsd-kind-icon">Error</a></li>
 							</ul>
 						</section>
 					</div>
@@ -106,87 +117,72 @@
 					<a name="constructor" class="tsd-anchor"></a>
 					<h3>constructor</h3>
 					<ul class="tsd-signatures tsd-kind-constructor tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">new <wbr>App<wbr>Services<span class="tsd-signature-symbol">(</span>faceManagementService<span class="tsd-signature-symbol">: </span><a href="_facemanagementservice_.facemanagementservice.html" class="tsd-signature-type">FaceManagementService</a>, detectionService<span class="tsd-signature-symbol">: </span><a href="_detectionservice_.detectionservice.html" class="tsd-signature-type">DetectionService</a>, commandService<span class="tsd-signature-symbol">: </span><a href="_commandservice_.commandservice.html" class="tsd-signature-type">CommandService</a>, configService<span class="tsd-signature-symbol">: </span><a href="_configservice_.configservice.html" class="tsd-signature-type">ConfigService</a>, faceCapture<span class="tsd-signature-symbol">: </span><a href="_facecapture_.facecapture.html" class="tsd-signature-type">FaceCapture</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_appresources_.appservices.html" class="tsd-signature-type">AppServices</a></li>
+						<li class="tsd-signature tsd-kind-icon">new <wbr>Run<wbr>Condition<wbr>Exists<wbr>Error<span class="tsd-signature-symbol">(</span>commandId<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span>, runConditionType<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">RunConditionType</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_commandservice_.runconditionexistserror.html" class="tsd-signature-type">RunConditionExistsError</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/znetstar/face-command-server/blob/ba3b188/src/AppResources.ts#L21">AppResources.ts:21</a></li>
+									<li>Defined in <a href="https://github.com/znetstar/face-command-server/blob/07617a8/src/CommandService.ts#L30">CommandService.ts:30</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>faceManagementService: <a href="_facemanagementservice_.facemanagementservice.html" class="tsd-signature-type">FaceManagementService</a></h5>
+									<h5>commandId: <span class="tsd-signature-type">number</span></h5>
 								</li>
 								<li>
-									<h5>detectionService: <a href="_detectionservice_.detectionservice.html" class="tsd-signature-type">DetectionService</a></h5>
-								</li>
-								<li>
-									<h5>commandService: <a href="_commandservice_.commandservice.html" class="tsd-signature-type">CommandService</a></h5>
-								</li>
-								<li>
-									<h5>configService: <a href="_configservice_.configservice.html" class="tsd-signature-type">ConfigService</a></h5>
-								</li>
-								<li>
-									<h5>faceCapture: <a href="_facecapture_.facecapture.html" class="tsd-signature-type">FaceCapture</a></h5>
+									<h5>runConditionType: <span class="tsd-signature-type">RunConditionType</span></h5>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <a href="_appresources_.appservices.html" class="tsd-signature-type">AppServices</a></h4>
+							<h4 class="tsd-returns-title">Returns <a href="_commandservice_.runconditionexistserror.html" class="tsd-signature-type">RunConditionExistsError</a></h4>
 						</li>
 					</ul>
 				</section>
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Properties</h2>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
-					<a name="commandservice" class="tsd-anchor"></a>
-					<h3>command<wbr>Service</h3>
-					<div class="tsd-signature tsd-kind-icon">command<wbr>Service<span class="tsd-signature-symbol">:</span> <a href="_commandservice_.commandservice.html" class="tsd-signature-type">CommandService</a></div>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
+					<a name="message" class="tsd-anchor"></a>
+					<h3>message</h3>
+					<div class="tsd-signature tsd-kind-icon">message<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
+						<p>Inherited from Error.message</p>
 						<ul>
-							<li>Defined in <a href="https://github.com/znetstar/face-command-server/blob/ba3b188/src/AppResources.ts#L22">AppResources.ts:22</a></li>
+							<li>Defined in /Users/zachary/Projects/face-command-server/node_modules/typescript/lib/lib.es5.d.ts:904</li>
 						</ul>
 					</aside>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
-					<a name="configservice" class="tsd-anchor"></a>
-					<h3>config<wbr>Service</h3>
-					<div class="tsd-signature tsd-kind-icon">config<wbr>Service<span class="tsd-signature-symbol">:</span> <a href="_configservice_.configservice.html" class="tsd-signature-type">ConfigService</a></div>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
+					<a name="name" class="tsd-anchor"></a>
+					<h3>name</h3>
+					<div class="tsd-signature tsd-kind-icon">name<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
+						<p>Inherited from Error.name</p>
 						<ul>
-							<li>Defined in <a href="https://github.com/znetstar/face-command-server/blob/ba3b188/src/AppResources.ts#L22">AppResources.ts:22</a></li>
+							<li>Defined in /Users/zachary/Projects/face-command-server/node_modules/typescript/lib/lib.es5.d.ts:903</li>
 						</ul>
 					</aside>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
-					<a name="detectionservice" class="tsd-anchor"></a>
-					<h3>detection<wbr>Service</h3>
-					<div class="tsd-signature tsd-kind-icon">detection<wbr>Service<span class="tsd-signature-symbol">:</span> <a href="_detectionservice_.detectionservice.html" class="tsd-signature-type">DetectionService</a></div>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-overwrite tsd-is-inherited">
+					<a name="stack" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> stack</h3>
+					<div class="tsd-signature tsd-kind-icon">stack<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
+						<p>Inherited from Error.stack</p>
+						<p>Overrides Error.stack</p>
 						<ul>
-							<li>Defined in <a href="https://github.com/znetstar/face-command-server/blob/ba3b188/src/AppResources.ts#L22">AppResources.ts:22</a></li>
+							<li>Defined in /Users/zachary/Projects/face-command-server/node_modules/typescript/lib/lib.es5.d.ts:905</li>
 						</ul>
 					</aside>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
-					<a name="facecapture" class="tsd-anchor"></a>
-					<h3>face<wbr>Capture</h3>
-					<div class="tsd-signature tsd-kind-icon">face<wbr>Capture<span class="tsd-signature-symbol">:</span> <a href="_facecapture_.facecapture.html" class="tsd-signature-type">FaceCapture</a></div>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-static">
+					<a name="error" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagStatic">Static</span> Error</h3>
+					<div class="tsd-signature tsd-kind-icon">Error<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">ErrorConstructor</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/znetstar/face-command-server/blob/ba3b188/src/AppResources.ts#L22">AppResources.ts:22</a></li>
-						</ul>
-					</aside>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
-					<a name="facemanagementservice" class="tsd-anchor"></a>
-					<h3>face<wbr>Management<wbr>Service</h3>
-					<div class="tsd-signature tsd-kind-icon">face<wbr>Management<wbr>Service<span class="tsd-signature-symbol">:</span> <a href="_facemanagementservice_.facemanagementservice.html" class="tsd-signature-type">FaceManagementService</a></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/znetstar/face-command-server/blob/ba3b188/src/AppResources.ts#L22">AppResources.ts:22</a></li>
+							<li>Defined in /Users/zachary/Projects/face-command-server/node_modules/typescript/lib/lib.es5.d.ts:914</li>
 						</ul>
 					</aside>
 				</section>
@@ -198,10 +194,10 @@
 					<li class="globals  ">
 						<a href="../globals.html"><em>Globals</em></a>
 					</li>
-					<li class="current tsd-kind-external-module">
+					<li class=" tsd-kind-external-module">
 						<a href="../modules/_appresources_.html">"<wbr>App<wbr>Resources"</a>
 					</li>
-					<li class=" tsd-kind-external-module">
+					<li class="current tsd-kind-external-module">
 						<a href="../modules/_commandservice_.html">"<wbr>Command<wbr>Service"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
@@ -212,6 +208,9 @@
 					</li>
 					<li class=" tsd-kind-external-module">
 						<a href="../modules/_databasemodels_.html">"<wbr>Database<wbr>Models"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="../modules/_defaultconfiguration_.html">"<wbr>Default<wbr>Configuration"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
 						<a href="../modules/_detectionservice_.html">"<wbr>Detection<wbr>Service"</a>
@@ -226,13 +225,13 @@
 						<a href="../modules/_facemanagementservice_.html">"<wbr>Face<wbr>Management<wbr>Service"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
+						<a href="../modules/_logsservice_.html">"<wbr>Logs<wbr>Service"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
 						<a href="../modules/_rpcinterface_.html">"RPCInterface"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
 						<a href="../modules/_webserver_.html">"<wbr>Web<wbr>Server"</a>
-					</li>
-					<li class=" tsd-kind-external-module">
-						<a href="../modules/_default_configuration_.html">"default_<wbr>configuration"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
 						<a href="../modules/_index_.html">"index"</a>
@@ -245,38 +244,41 @@
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
 					<li class=" tsd-kind-class tsd-parent-kind-external-module">
-						<a href="_appresources_.appresources.html" class="tsd-kind-icon">App<wbr>Resources</a>
+						<a href="_commandservice_.commandservice.html" class="tsd-kind-icon">Command<wbr>Service</a>
+					</li>
+					<li class=" tsd-kind-class tsd-parent-kind-external-module">
+						<a href="_commandservice_.facesrecognizedsetininvalidrunconditionerror.html" class="tsd-kind-icon">Faces<wbr>Recognized<wbr>Set<wbr>InInvalid<wbr>Run<wbr>Condition<wbr>Error</a>
+					</li>
+					<li class=" tsd-kind-class tsd-parent-kind-external-module">
+						<a href="_commandservice_.nonexistantcommanderror.html" class="tsd-kind-icon">Non<wbr>Existant<wbr>Command<wbr>Error</a>
+					</li>
+					<li class=" tsd-kind-class tsd-parent-kind-external-module">
+						<a href="_commandservice_.nonexistantcommandtypeerror.html" class="tsd-kind-icon">Non<wbr>Existant<wbr>Command<wbr>Type<wbr>Error</a>
 					</li>
 				</ul>
 				<ul class="current">
 					<li class="current tsd-kind-class tsd-parent-kind-external-module">
-						<a href="_appresources_.appservices.html" class="tsd-kind-icon">App<wbr>Services</a>
+						<a href="_commandservice_.runconditionexistserror.html" class="tsd-kind-icon">Run<wbr>Condition<wbr>Exists<wbr>Error</a>
 						<ul>
 							<li class=" tsd-kind-constructor tsd-parent-kind-class">
-								<a href="_appresources_.appservices.html#constructor" class="tsd-kind-icon">constructor</a>
+								<a href="_commandservice_.runconditionexistserror.html#constructor" class="tsd-kind-icon">constructor</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-class">
-								<a href="_appresources_.appservices.html#commandservice" class="tsd-kind-icon">command<wbr>Service</a>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
+								<a href="_commandservice_.runconditionexistserror.html#message" class="tsd-kind-icon">message</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-class">
-								<a href="_appresources_.appservices.html#configservice" class="tsd-kind-icon">config<wbr>Service</a>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited">
+								<a href="_commandservice_.runconditionexistserror.html#name" class="tsd-kind-icon">name</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-class">
-								<a href="_appresources_.appservices.html#detectionservice" class="tsd-kind-icon">detection<wbr>Service</a>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-overwrite tsd-is-inherited">
+								<a href="_commandservice_.runconditionexistserror.html#stack" class="tsd-kind-icon">stack</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-class">
-								<a href="_appresources_.appservices.html#facecapture" class="tsd-kind-icon">face<wbr>Capture</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-class">
-								<a href="_appresources_.appservices.html#facemanagementservice" class="tsd-kind-icon">face<wbr>Management<wbr>Service</a>
+							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-static">
+								<a href="_commandservice_.runconditionexistserror.html#error" class="tsd-kind-icon">Error</a>
 							</li>
 						</ul>
 					</li>
 				</ul>
 				<ul class="after-current">
-					<li class=" tsd-kind-variable tsd-parent-kind-external-module tsd-is-not-exported">
-						<a href="../modules/_appresources_.html#winstonsilentlogger" class="tsd-kind-icon">Winston<wbr>Silent<wbr>Logger</a>
-					</li>
 				</ul>
 			</nav>
 		</div>
