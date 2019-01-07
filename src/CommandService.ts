@@ -127,7 +127,7 @@ export default class CommandService extends CommandServiceBase {
         };
 
         if (typeof(data) !== 'undefined')
-            dbEntry.Data = msgpack.encode(data);
+            dbEntry.data = msgpack.encode(data);
         
         // Saves the command object to the database.
         const dbCommand = await database.Command.create(dbEntry);

@@ -21,6 +21,8 @@
   },
   "homepage": "https://github.com/znetstar/face-command-server#readme",
   "devDependencies": {
+    "@types/bluebird": "^3.5.25",
+    "bluebird": "^3.5.3",
     "chai": "^4.2.0",
     "chance": "^1.0.18",
     "grunt": "^1.0.3",

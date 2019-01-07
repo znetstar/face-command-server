@@ -1,18 +1,23 @@
+const Promise = require("bluebird");
 const Random = require("face-command-common/lib/Random").default;
 const Chance = require("chance");
 const Nconf = require("nconf");
-const winston = require("winston");
 const Sequelize = require("sequelize");
 const { imdecodeAsync, CascadeClassifier, HAAR_FRONTALFACE_ALT2 } = require("opencv4nodejs");
 const fs = require("fs").promises;
-const temp = require("temp");
+const temp = Promise.promisifyAll(require("temp"));
 const path = require("path");
+const { Server } = require("multi-rpc");
 let { FaceCapture } = require("../lib");
 const { AppResources, DatabaseModels, DetectionService, CommandService, ConfigService, LogsService, FaceManagementService } = require("../lib");
 const { WinstonSilentLogger } = require("../lib/AppResources");
-const { Server } = require("multi-rpc");
+
 
 temp.track();
+
+async function tempFile() {
+    return await temp.openAsync.apply(temp, arguments);
+}
 
 const chance = Chance();
 const common = new Random();
@@ -52,14 +57,14 @@ async function capture(resources) {
     return capture;
 }
 
-async function detectionSvc (app) {
+async function detectionSvc (app, cap) {
     app = app || await appResources();
-    return new DetectionService(app, (await capture()));
+    return new DetectionService(app, cap || (await capture()));
 }
 
-async function commandSvc(app) {
+async function commandSvc(app, det) {
     app = app || (await appResources());
-    return new CommandService(app, (await detectionSvc(app)));
+    return new CommandService(app, det || (await detectionSvc(app)));
 }
 
 async function commandSvcReplaceRun(app, fn) {
@@ -89,7 +94,7 @@ async function appResources (defaultConfig) {
 
     if (!defaultConfig) {
         nconf.use("memory");
-        
+
         defaultConfig = require("../lib/DefaultConfiguration").default;
         defaultConfig.commandTypes = [
             sampleCommandTypePath()
@@ -128,5 +133,6 @@ module.exports = {
     facesSvc,
     sampleCommandTypePath,
     sampleCommandTypeName,
-    sampleImage
+    sampleImage,
+    tempFile
 };

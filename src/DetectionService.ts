@@ -34,8 +34,9 @@ export default class DetectionService extends DetectionServiceBase {
         const { database } = this.resources;
 
         const dbStatus = await database.Status.create({
-            statusType: Number(statusType),
-            time: time
+            statusType,
+            time,
+            brightness
         });
         
         for (let face of recognizedFaces) {

@@ -6,16 +6,42 @@ import * as msgpack from "msgpack-lite";
 import { default as AppResources } from "./AppResources";
 import { default as CommandService } from "./CommandService";
 
+/**
+ * Contains database models and functions for processing objects saved in the database.
+ */
 export default class DatabaseModels {
+    /**
+     * Model for the Faces table.
+     */
     public Face: Sequelize.Model<any, any>;
+
+    /**
+     * Model for the Statuses table.
+     */
     public Status: Sequelize.Model<any, any>;
+
+    /**
+     * Model for the Commands table.
+     */
     public Command: Sequelize.Model<any, any>;
+
+    /**
+     * Model for the RunConditions table.
+     */
     public RunCondition: Sequelize.Model<any, any>;
 
+    /**
+     * 
+     * @param sequelize - Instance of Sequelize.
+     */
     constructor(private sequelize: ISequelize) {
         
     }
 
+    /**
+     * Converts a record in the RunConditions table into a RunCondition object.
+     * @param dbRunCondition - Object containing columns/values from the database.
+     */
     public static async FromDBRunCondition(dbRunCondition: any): Promise<RunCondition> {
         const dbFaces = await dbRunCondition.getFaces();
         const runCondition = new RunCondition(dbRunCondition.runConditionType, (await Promise.all<Face>(dbFaces.map(DatabaseModels.FromDBFace))), dbRunCondition.id);
@@ -23,15 +49,27 @@ export default class DatabaseModels {
         return runCondition;
     }
 
+    /**
+     * Converts a record in the Faces table into a Face object.
+     * @param dbFace - Object containing columns/values from the database.
+     */
     public static async FromDBFace(dbFace: any): Promise<Face> {
         return new Face(dbFace.id, dbFace.name, new Uint8Array(dbFace.image), dbFace.autostart)
     }
 
+    /**
+     * Converts a record in the Statuses table into a Status object.
+     * @param dbStatus - Object containing columns/values from the database.
+     */
     public static async FromDBStatus(dbStatus: any): Promise<Status> {
         const dbFaces = await dbStatus.getFaces();
-        return new Status(dbStatus.id, dbStatus.statusType, dbStatus.time, dbStatus.brightness, (await Promise.all<Face>(dbFaces.map(DatabaseModels.FromDBFace))));
+        return new Status(dbStatus.id, dbStatus.statusType, new Date(dbStatus.time), dbStatus.brightness, (await Promise.all<Face>(dbFaces.map(DatabaseModels.FromDBFace))));
     }
 
+    /**
+     * Converts a record in the Commands table into a Command object.
+     * @param dbCommand - Object containing columns/values from the database.
+     */
     public static async FromDBCommand(dbCommand: any, resources: AppResources): Promise<Command> {
         const dbConditions = await dbCommand.getRunConditions();
         const conditions = await Promise.all<RunCondition>(dbConditions.map(DatabaseModels.FromDBRunCondition));
@@ -48,6 +86,9 @@ export default class DatabaseModels {
         return new Command(dbCommand.id, dbCommand.name, commandType, conditions, data);
     }   
 
+    /**
+     * Creates database tables if they do not already exist.
+     */
     public async create(): Promise<any> {
         this.Face = this.sequelize.define("Face", {
             id: { type: INTEGER, primaryKey: true, autoIncrement: true },

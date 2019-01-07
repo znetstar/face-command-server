@@ -1,9 +1,6 @@
 const { assert } = require("chai");
-const lodash = require("lodash");
 const random = require("./random");
-const temp = require("temp");
 const fs = require("fs").promises;
-temp.track();
 
 function randomObj(depth, index) {
     index = index || 0;
@@ -195,12 +192,7 @@ describe("ConfigService", function () {
             const res = await random.appResources({});
             const cfgSvc = await random.configSvc(res);
 
-            const file = await new Promise((resolve, reject) => {
-                temp.open(".json", (err, info) => {
-                    if (err) reject(err);
-                    resolve(info);
-                });
-            });
+            const file = await random.tempFile(".json");
 
             await fs.writeFile(file.path, "{}");
             res.nconf.file({ file: file.path });
@@ -221,12 +213,7 @@ describe("ConfigService", function () {
             const res = await random.appResources({});
             const cfgSvc = await random.configSvc(res);
 
-            const file = await new Promise((resolve, reject) => {
-                temp.open(".json", (err, info) => {
-                    if (err) reject(err);
-                    resolve(info);
-                });
-            });
+            const file = await random.tempFile(".json");
 
             await fs.writeFile(file.path, "{}");
             res.nconf.file({ file: file.path });
