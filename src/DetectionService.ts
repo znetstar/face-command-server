@@ -8,34 +8,66 @@ import AppResources from "./AppResources";
 import { default as DatabaseModels } from "./DatabaseModels";
 import FaceCapture from "./FaceCapture";
 
+/**
+ * A service that monitors the capture source for faces.
+ */
 export default class DetectionService extends DetectionServiceBase {
-    protected detectionTimeout: any;
+    /**
+     * Result of "setInterval" on "DetectChanges".
+     */
+    protected detectionInterval: any;
+
+    /**
+     * The last status that occured.
+     */
     public lastStatus: Status = null;
 
+    /**
+     * 
+     * @param resources - Common application resources.
+     * @param capture - The capture source.
+     */
     constructor(protected resources: AppResources, protected capture: FaceCapture) {
         super(resources);
         
         this.on('StatusChange', this.LogStatusChange.bind(this));
     }
 
+    /**
+     * Logs the change of status to the console.
+     * @param status - The new status that occured.
+     */
     protected LogStatusChange(status: Status): void {
         this.resources.logger.verbose(`A change in the detection status has occured: ${status}`);
     } 
 
+    /**
+     * Returns true if the "DetectChanges" loop is running.
+     */
     public async IsDetectionRunning(): Promise<boolean> {
-        return (typeof(this.detectionTimeout) !== 'undefined') && (this.detectionTimeout !== null);
+        return (typeof(this.detectionInterval) !== 'undefined') && (this.detectionInterval !== null);
     }
 
+    /**
+     * Returns the last status that occured.
+     */
     public async GetLastStatus(): Promise<Status> {
         return this.lastStatus;
     }
 
+    /**
+     * Inserts a status into the database.
+     * @param statusType - Type of status that will be inserted.
+     * @param time - Time at which the status occured.
+     * @param brightness - Brightness of the frame that was captured.
+     * @param recognizedFaces - Faces that were recognized during the status change.
+     */
     public async AddStatus(statusType: StatusType, time: Date = new Date(), brightness: number, recognizedFaces: Face[] = []): Promise<Status> {
         const { database } = this.resources;
 
         const dbStatus = await database.Status.create({
             statusType,
-            time,
+            time: DatabaseModels.DateToSQLiteFormat(time),
             brightness
         });
         
@@ -45,15 +77,12 @@ export default class DetectionService extends DetectionServiceBase {
         }
 
         const status = new Status(dbStatus.id, statusType, time, brightness, recognizedFaces);
-        /**
-         * Is emitted when there has been a status change
-         * @param status - The status object.
-         * @event
-         */
-        this.emit("StatusChange", status);
         return status;
     }
 
+    /**
+     * Retrieves a status by its ID.
+     */
     public async GetStatus(id: number): Promise<Status> {
         const { database } = this.resources;
 
@@ -62,25 +91,41 @@ export default class DetectionService extends DetectionServiceBase {
         return await DatabaseModels.FromDBStatus(dbStatus);
     }
 
+    /**
+     * Retrieves all statuses between a given date range.
+     * @param start - Start date of the query.
+     * @param end - End date of the query.
+     */
     public async StatusHistory(start?: Date, end: Date = new Date()): Promise<Status[]> {
         const { database } = this.resources;
 
-        const dbStatuses = await database.Status.find({
+        const q = {
             where: {
                 time: {
-                    [Op.gte]: end,
-                    [Op.lte]: start
+                    [Op.lte]: DatabaseModels.DateToSQLiteFormat(end)
                 }
-            }
-        });
+            },
+            order: [
+                ["time", "DESC"]
+            ]
+        };
 
-        return await Promise.all<Status>(
+        if (start) 
+            q.where.time.$gte = DatabaseModels.DateToSQLiteFormat(start); 
+
+        const dbStatuses = await database.Status.findAll(q);
+
+        const statuses = await Promise.all<Status>(
             dbStatuses.map(DatabaseModels.FromDBStatus)
         );
+
+        return statuses;
     }
 
-    
-
+    /**
+     * Attempts to recognize faces in a frame from the capture source.
+     * @param options - Options for detection.
+     */
     public async DetectChanges(options: DetectionOptions): Promise<any> {
         const { logger, nconf } = this.resources;
         const { faces, eigenFaceRecognizerOptions } = options;
@@ -103,12 +148,10 @@ export default class DetectionService extends DetectionServiceBase {
                 if (!options.state.brightnessAlert) {
                     logger.warn(`Current brightness ${displayBrightness} is too low to run detection. The minimum is ${minBrightness}`);
                     options.state.brightnessAlert = true;
-                    if (this.lastStatus && this.lastStatus.statusType === (+StatusType.FacesDetected || this.lastStatus.statusType === +StatusType.FacesRecognized)) {
-                        statusType
-                    }
                 }
-                else
+                else {
                     logger.debug(`Brightness ${displayBrightness} is still too low to run detection. Minimum is ${minBrightness}`);
+                }
             }
             else {
                 options.state.brightnessAlert = false;
@@ -125,7 +168,6 @@ export default class DetectionService extends DetectionServiceBase {
                     await recognizer.trainAsync(loadedFaces, labels);
                     options.state.recognizer = recognizer;
                 }
-
 
                 logger.debug("Detecting faces in image");
                 const facesDetected = await this.capture.FacesFromImage(frame);
@@ -149,10 +191,6 @@ export default class DetectionService extends DetectionServiceBase {
                                 logger.debug(`Face with ID "${face.id}" has been detected in the image.`);
                             }
                         }
-
-                        if (!facesRecognized.length && this.lastStatus && this.lastStatus.statusType === +StatusType.FacesRecognized) {
-                            statusType = +StatusType.FacesNoLongerRecognized;
-                        }
                     }
                 } else if (this.lastStatus && (this.lastStatus.statusType === +StatusType.FacesDetected || this.lastStatus.statusType === +StatusType.FacesRecognized)) {
                     statusType = +StatusType.FacesNoLongerDetected;
@@ -161,6 +199,12 @@ export default class DetectionService extends DetectionServiceBase {
 
             if (!this.lastStatus || ( this.lastStatus.statusType !== statusType )) {
                 const status = await this.AddStatus(statusType, new Date(), currentBrightness, facesRecognized);
+                /**
+                 * Is emitted when there has been a status change
+                 * @param status - The status object.
+                 * @event
+                 */
+                this.emit("StatusChange", status, this.lastStatus);
                 this.lastStatus = status;
             }
 
@@ -171,13 +215,20 @@ export default class DetectionService extends DetectionServiceBase {
         }
     }
 
+    /**
+     * Stops detection. 
+     */
     public StopDetection(): void {
-        clearInterval(this.detectionTimeout);
-        this.detectionTimeout = null;
+        clearInterval(this.detectionInterval);
+        this.detectionInterval = null;
         this.resources.logger.info("Detection stopped");
         this.emit("DetectionRunning", false);
     }
 
+    /**
+     * Starts detection.
+     * @param inputOptions - Options for detection.
+     */
     public async RPC_StartDetection(inputOptions: any): Promise<void> {
         const { database } = this.resources;
         const eigenFaceRecognizerOptions = new EigenFaceRecognizerOptions(inputOptions.eigenFaceRecognizerOptions.components, inputOptions.eigenFaceRecognizerOptions.threshold);
@@ -192,6 +243,10 @@ export default class DetectionService extends DetectionServiceBase {
         return this.StartDetection(options);
     }
 
+    /**
+     * Starts detection.
+     * @param inputOptions - Options for detection.
+     */
     public async StartDetection(options: DetectionOptions): Promise<void> {
         const { database } = this.resources; 
         this.resources.logger.info(`Beginning detection with ${options.faces.length} face(s), capturing every ${options.frequency/1000} seconds`);
@@ -205,9 +260,8 @@ export default class DetectionService extends DetectionServiceBase {
 
             options.faces = await Promise.all(dbFaces.map(DatabaseModels.FromDBFace));
         }   
-
         
-        this.detectionTimeout = setInterval(this.DetectChanges.bind(this), options.frequency, options);
+        this.detectionInterval = setInterval(this.DetectChanges.bind(this), options.frequency, options);
         
         this.emit("DetectionRunning", true);
     }

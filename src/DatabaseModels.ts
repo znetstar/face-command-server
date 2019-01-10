@@ -1,8 +1,9 @@
 
 import * as Sequelize from "sequelize";
 import { Face, Command, Status, RunCondition } from "face-command-common";
-import { INTEGER, STRING, BLOB, BOOLEAN, SMALLINT, TIME, FLOAT, Sequelize as ISequelize } from "sequelize";
+import { INTEGER, STRING, BLOB, BOOLEAN, SMALLINT, DATE, FLOAT, Sequelize as ISequelize } from "sequelize";
 import * as msgpack from "msgpack-lite";
+import * as moment from "moment";
 import { default as AppResources } from "./AppResources";
 import { default as CommandService } from "./CommandService";
 
@@ -36,6 +37,19 @@ export default class DatabaseModels {
      */
     constructor(private sequelize: ISequelize) {
         
+    }
+
+    /**
+     * Format for the SQLite date string.
+     */
+    public static get SQLiteDateFormat(): string { return 'YYYY-MM-DD HH:mm:ss.SSS'; }
+
+    /**
+     * Converts a date to the SQLite date string.
+     * @param date - Date to convert.
+     */
+    public static DateToSQLiteFormat(date: Date): string {
+        return moment(date).format(DatabaseModels.SQLiteDateFormat);
     }
 
     /**
@@ -100,7 +114,7 @@ export default class DatabaseModels {
         this.Status = this.sequelize.define("Status", {
             id: { type: INTEGER, primaryKey: true, autoIncrement: true },
             statusType: { type: SMALLINT },
-            time: { type: TIME },
+            time: { type: DATE },
             brightness: { type: FLOAT }
         });
     

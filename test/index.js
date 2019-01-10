@@ -3,4 +3,5 @@ describe("face-command-server", function () {
     require("./CommandService");
     require("./ConfigService");
     require("./DatabaseModels");
+    require("./DetectionService");
 });

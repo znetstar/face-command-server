@@ -28,12 +28,18 @@ export class TooManyFacesError extends Error {
     }
 }
 
+/**
+ * Is thrown when a frame is captured that is too low for procesisng.
+ */
 export class ImageBelowBrightnessThresholdError extends Error {
     constructor(brightness: number, targetBrightness: number) {
         super(`Brightness level of image ${brightness} was below the minimum required for processing ${targetBrightness}`);
     }
 }
 
+/**
+ * Is thrown when 
+ */
 export class ClassifierDoesNotExistError extends Error {
     constructor(classifier: string) {
         super(`Classifier "${classifier}" does not exist`);

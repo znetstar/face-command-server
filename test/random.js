@@ -1,7 +1,9 @@
 const Promise = require("bluebird");
+const { EigenFaceRecognizerOptions } = require("face-command-common");
 const Random = require("face-command-common/lib/Random").default;
 const Chance = require("chance");
 const Nconf = require("nconf");
+const _ = require("lodash");
 const Sequelize = require("sequelize");
 const { imdecodeAsync, CascadeClassifier, HAAR_FRONTALFACE_ALT2 } = require("opencv4nodejs");
 const fs = require("fs").promises;
@@ -11,7 +13,8 @@ const { Server } = require("multi-rpc");
 let { FaceCapture } = require("../lib");
 const { AppResources, DatabaseModels, DetectionService, CommandService, ConfigService, LogsService, FaceManagementService } = require("../lib");
 const { WinstonSilentLogger } = require("../lib/AppResources");
-
+const defaultConfig = require("../lib/DefaultConfiguration").default;
+Object.freeze(defaultConfig);
 
 temp.track();
 
@@ -34,26 +37,26 @@ async function sampleImage() {
     return await fs.readFile(path.join( __dirname, "sample.png" ));
 }
 
-function captureSource() {
+function captureSource(image) {
     return {
         readAsync: async function () {
-            return await imdecodeAsync(await sampleImage());
+            return await imdecodeAsync(image || (await sampleImage()));
         }
     };
 }
 
-async function capture(resources) { 
+async function capture(resources, image) { 
     let oldFc = FaceCapture.prototype;
 
-    FaceCapture = function (resources) {
+    FaceCapture = function (resources, image) {
         this.resources = resources;
-        this.captureSource = captureSource();
+        this.captureSource = captureSource(image);
         this.faceClassifier = new CascadeClassifier(HAAR_FRONTALFACE_ALT2);
     };
 
     FaceCapture.prototype = oldFc;
 
-    const capture = new FaceCapture(resources || (await appResources()), 0);
+    const capture = new FaceCapture(resources || (await appResources()), image);
     return capture;
 }
 
@@ -89,28 +92,23 @@ async function facesSvc(app, faceCapture) {
 }
 
 
-async function appResources (defaultConfig) {
+async function appResources (dConf) {
     const nconf = new (Nconf.Provider)();
 
-    if (!defaultConfig) {
+    if (!dConf) {
+        dConf = _.cloneDeep(defaultConfig);
         nconf.use("memory");
 
-        defaultConfig = require("../lib/DefaultConfiguration").default;
-        defaultConfig.commandTypes = [
+        dConf.commandTypes = [
             sampleCommandTypePath()
         ];
 
-        defaultConfig.minimumBrightness = 0;
+        dConf.minimumBrightness = 0;
     }
 
-    nconf.defaults(defaultConfig);
+    nconf.defaults(dConf);
 
-    const info = await new Promise((resolve, reject) => {
-        temp.open(".sqlite", (err, info) => {
-            if (err) reject(err);
-            else resolve(info);
-        });
-    });
+    const info = await temp.openAsync("sqlite");
 
     const db = new Sequelize(`sqlite://${info.path}`);
     await db.authenticate();
@@ -118,6 +116,10 @@ async function appResources (defaultConfig) {
     await dbModels.create();
     const rpcServer = new Server();
     return new AppResources(nconf, dbModels, WinstonSilentLogger, rpcServer);
+}
+
+function recOptions() {
+    return new EigenFaceRecognizerOptions(defaultConfig.eigenFaceRecognizerOptions.components, defaultConfig.eigenFaceRecognizerOptions.threshold);
 }
 
 module.exports = {
@@ -134,5 +136,7 @@ module.exports = {
     sampleCommandTypePath,
     sampleCommandTypeName,
     sampleImage,
-    tempFile
+    tempFile,
+    recOptions,
+    defaultConfig
 };

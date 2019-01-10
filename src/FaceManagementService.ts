@@ -5,8 +5,10 @@ import {
     imencodeAsync,
 } from "opencv4nodejs";
 import AppResources from "./AppResources";
-import FaceCapture from "./FaceCapture";
+import { default as FaceCapture, ImageBelowBrightnessThresholdError } from "./FaceCapture";
 import { default as DatabaseModels } from "./DatabaseModels";
+
+
 
 
 /**
@@ -28,6 +30,12 @@ export default class FaceManagementService extends FaceManagementServiceBase {
             let image: Mat = (inputImage instanceof Uint8Array) ? (await imdecodeAsync(Buffer.from(inputImage))) : inputImage;
             
             image = await image.bgrToGrayAsync();
+
+            const imageBrightness = await this.capture.GetBrightness(image);
+            const targetBrightness = nconf.get("minimumBrightness");
+
+            if (imageBrightness < targetBrightness)
+                throw new ImageBelowBrightnessThresholdError(imageBrightness, targetBrightness);
 
             if (!skipDetection) {
                 image = await this.capture.FaceFromImage(image);
@@ -58,8 +66,7 @@ export default class FaceManagementService extends FaceManagementServiceBase {
     }
 
     public async AddFaceFromCamera(name: string, autostart: boolean = false): Promise<Face> {
-        const { logger, nconf } = this.resources;
-        const { ImageFromCamera } = this.capture;
+        const { logger } = this.resources;
 
         try {
             logger.verbose("Attempting to add a face from the capture source");

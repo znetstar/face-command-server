@@ -2,6 +2,7 @@ const { assert } = require("chai");
 const { RunConditionType, StatusType, RunCondition} = require("face-command-common");
 const random = require("./random");
 const Sequelize = require("sequelize");
+const moment = require("moment");
 const { DatabaseModels } = require("..");
 
 describe("DatabaseModels", function () {
@@ -98,6 +99,19 @@ describe("DatabaseModels", function () {
             const result = await DatabaseModels.FromDBCommand(await res.database.Command.findById(cmd.id), res);
             
             assert.deepEqual(cmd, result);
+        });
+    });
+
+    describe("#DateToSQLiteFormat()", function () {
+        it("should return a string with the appropriate format", async function () {
+            const date = random.chance.date();
+            const dateStr = DatabaseModels.DateToSQLiteFormat(date);
+            
+            const resultMoment = moment(dateStr, 'YYYY-MM-DD HH:mm:ss.SSS');
+            assert.ok(resultMoment);
+
+            const resultDate = resultMoment.toDate();
+            assert.equal(+date, +resultDate);
         });
     });
 

@@ -306,8 +306,9 @@ export default class CommandService extends CommandServiceBase {
     /**
      * Is called when a status change occurs.
      * @param status - The new status.
+     * @param lastStatus - The status that occured immediately before it, if any.
      */
-    public async OnStatusChange(status: Status): Promise<void> {
+    public async OnStatusChange(status: Status, lastStatus: Status): Promise<void> {
         const { database, logger } = this.resources;
 
         // Adds run condition types to the database query for run conditions based on the type of status that was raised.
@@ -318,9 +319,6 @@ export default class CommandService extends CommandServiceBase {
         else if ((status.statusType === +StatusType.FacesNoLongerDetected) || (status.statusType === +StatusType.BrightnessTooLow))
             conditionType.push(+RunConditionType.RunOnFacesNoLongerDetected, +RunConditionType.RunOnSpecificFacesNoLongerRecognized, +RunConditionType.RunOnAnyFaceNoLongerRecognized);
 
-        else if (status.statusType === +StatusType.FacesNoLongerRecognized)
-            conditionType.push(+RunConditionType.RunOnSpecificFacesNoLongerRecognized, +RunConditionType.RunOnAnyFaceNoLongerRecognized);
-
         else if (status.statusType === +StatusType.FacesRecognized && (status.recognizedFaces))
             conditionType.push(+RunConditionType.RunOnFaceDetected, +RunConditionType.RunOnSpecificFacesRecognized, +RunConditionType.RunOnAnyFaceRecognized);
 
@@ -330,6 +328,25 @@ export default class CommandService extends CommandServiceBase {
         else if (status.statusType === +StatusType.NoFacesDetected)
             conditionType.push(+RunConditionType.RunOnNoFacesDetected);
 
+        const facesInNewStatus: number[] = [];
+        const facesNotInNewStatus: number[] = [];
+
+        if (lastStatus && lastStatus.statusType === +StatusType.FacesRecognized && lastStatus.recognizedFaces) {
+            for (let face of lastStatus.recognizedFaces) {
+                if (!status.recognizedFaces.filter((f) => f.id === face.id).length) {
+                    facesNotInNewStatus.push(face.id);
+                }
+            }
+        }
+
+        if (status.statusType === +StatusType.FacesRecognized) {
+            for (let face of status.recognizedFaces) {
+                facesInNewStatus.push(face.id);
+            }
+        }
+
+        if (facesNotInNewStatus) 
+            conditionType.push(+RunConditionType.RunOnSpecificFacesNoLongerRecognized); 
         
         const dbRunConditions = await database.RunCondition.findAll({
             where: {
@@ -345,9 +362,14 @@ export default class CommandService extends CommandServiceBase {
             if (ranCommand.has(runCondition.commandId)) 
                 continue;
 
-            if ((status.statusType === +StatusType.FacesRecognized || status.statusType === +StatusType.FacesNoLongerRecognized) && (runCondition.runConditionType === +RunConditionType.RunOnSpecificFacesRecognized || runCondition.runConditionType === +RunConditionType.RunOnSpecificFacesNoLongerRecognized)) {
-                const faceMatch = Boolean(runCondition.facesToRecognize.filter((f1) => status.recognizedFaces.some((f2) => f1.id === f2.id)).length);
-                if (!faceMatch) continue;
+            if (status.statusType === +StatusType.FacesRecognized && runCondition.runConditionType === +RunConditionType.RunOnSpecificFacesRecognized) {
+                const match = runCondition.facesToRecognize.map((f) => f.id).some((fId) => facesInNewStatus.some((i) => i === fId));
+                if (!match) continue;
+            }
+
+            if (runCondition.runConditionType === +RunConditionType.RunOnSpecificFacesNoLongerRecognized) {
+                const match = runCondition.facesToRecognize.map((f) => f.id).some((fId) => facesNotInNewStatus.some((i) => i === fId));
+                if (!match) continue;
             }
 
             const dbCommand = await database.Command.findById(runCondition.commandId);

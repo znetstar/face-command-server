@@ -494,7 +494,7 @@ describe("CommandService", function () {
             })();
         });
 
-        it("should only trigger commands with condition RunOnSpecificFacesNoLongerRecognized or RunOnSpecificFacesRecognized if the recognizedFaces array contains faces specified in the facesToRecognize property of the run condition ", function (done) {         
+        it("should only trigger commands with condition RunOnSpecificFacesRecognized if the recognizedFaces array contains faces specified in the facesToRecognize property of the run condition ", function (done) {         
             this.timeout(RUN_COMMAND_WAIT_TIME * 3);
             (async () => {
                 let timeout;
@@ -511,7 +511,7 @@ describe("CommandService", function () {
                     const faceSvc = await random.facesSvc(res, capture);
 
                     const conditions = [];
-                    const types = [+RunConditionType.RunOnSpecificFacesNoLongerRecognized, +RunConditionType.RunOnSpecificFacesRecognized];
+                    const types = [+RunConditionType.RunOnSpecificFacesRecognized];
                     for (let type of types) {
                         const rc = random.common.runCondition();
 
@@ -580,7 +580,7 @@ describe("CommandService", function () {
             })();
         });
 
-        it("should trigger commands with condition RunOnSpecificFacesNoLongerRecognized or RunOnAnyFaceNoLongerRecognized on status FacesNoLongerRecognized", function (done) {         
+        it("should trigger commands with condition RunOnSpecificFacesNoLongerRecognized if the faces in the previous status aren't in the current one", function (done) {         
             this.timeout(RUN_COMMAND_WAIT_TIME);
             (async () => {
                 function rcCmd() {
@@ -588,26 +588,31 @@ describe("CommandService", function () {
                 }
 
                 try {
-                    const cmdSvc = await random.commandSvcReplaceRun(void(0), rcCmd);
+                    const res = await random.appResources();
+                    const cmdSvc = await random.commandSvcReplaceRun(res, rcCmd);
+                    const fSvc = await random.facesSvc(res);
                     
                     const conditions = [];
-                    const types = [+RunConditionType.RunOnSpecificFacesNoLongerRecognized, +RunConditionType.RunOnAnyFaceNoLongerRecognized];
-                    for (let type of types) {
-                        const rc = random.common.runCondition();
 
-                        delete rc.id;
-                        delete rc.commandId;
-                        rc.facesToRecognize = [];
-                        rc.runConditionType = type;
-                        conditions.push(rc);
-                    }
+                    const rc = random.common.runCondition();
+                    const f = await fSvc.AddFace((await random.sampleImage()), random.chance.string(), random.chance.bool(), true);
+
+                    delete rc.id;
+                    delete rc.commandId;
+                    rc.facesToRecognize = [ f ];
+                    rc.runConditionType = +RunConditionType.RunOnSpecificFacesNoLongerRecognized;
+                    conditions.push(rc);
+
                     const data = random.chance.integer();
-                    await cmdSvc.AddCommand(random.sampleCommandTypeName(), conditions, random.chance.string(), data);
+                    await cmdSvc.AddCommand(random.sampleCommandTypeName(), [ rc ], random.chance.string(), data);
                     const status = random.common.status();
 
-                    status.statusType = +StatusType.FacesNoLongerRecognized;
+                    status.statusType = +StatusType.NoFacesDetected;
+                    const prevStatus = random.common.status();
+                    prevStatus.statusType = +StatusType.FacesRecognized;
+                    prevStatus.recognizedFaces = [ f ];
 
-                    cmdSvc.OnStatusChange(status);
+                    cmdSvc.OnStatusChange(status, prevStatus);
                 } catch (error) {
                     done(error);
                 }
