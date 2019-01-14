@@ -1,8 +1,6 @@
 const { assert } = require("chai");
-const { StatusType, DetectionOptions, EigenFaceRecognizerOptions } = require("face-command-common");
-const fs = require("fs").promises;
+const { StatusType, DetectionOptions } = require("face-command-common");
 const _ = require("lodash");
-const path = require("path");
 const random = require("./random");
 
 describe("DetectionService", function () {
@@ -35,6 +33,7 @@ describe("DetectionService", function () {
 
     describe("#AddStatus()", function () {
         it("should add new status to the database", async function () {
+            this.timeout(10000);
             const res = await random.appResources();
             const fSvc = await random.facesSvc(res);
             const dtSvc = await random.detectionSvc(res);
@@ -133,7 +132,7 @@ describe("DetectionService", function () {
                     const res = await random.appResources();
                     res.nconf.set("minimumBrightness", random.defaultConfig.minimumBrightness);
                     
-                    const cap = await random.capture(res, (await fs.readFile(path.join( __dirname, "sampleDark.png" ))));
+                    const cap = await random.capture(res, (await random.images.files["sampleDark.png"]()));
 
                     const dtSvc = await random.detectionSvc(res, cap);
                     
@@ -153,7 +152,7 @@ describe("DetectionService", function () {
             const res = await random.appResources();
             res.nconf.set("minimumBrightness", random.defaultConfig.minimumBrightness);
             
-            const cap = await random.capture(res, (await fs.readFile(path.join( __dirname, "sampleDark.png" ))));
+            const cap = await random.capture(res, (await random.images.files["sampleDark.png"]()));
 
             const dtSvc = await random.detectionSvc(res, cap);
     
@@ -165,6 +164,7 @@ describe("DetectionService", function () {
         });
 
         it("the same recognizer should be used provided the faces specified in the options are the same", async function () {
+            this.timeout(10000);
             const res = await random.appResources();
             const cap = await random.capture(res);
             const dtSvc = await random.detectionSvc(res, cap);
@@ -230,7 +230,7 @@ describe("DetectionService", function () {
         });
 
         it("should emit FacesNoLongerDetected if faces were previously detected but are no longer detected", function (done) {
-            this.timeout(5000);
+            this.timeout(10000);
             (async() => {
                 try {
                     const res = await random.appResources();
@@ -248,7 +248,7 @@ describe("DetectionService", function () {
                         try {
                             assert.equal(+StatusType.FacesDetected, status.statusType);
                             dtSvc.once("StatusChange", secondSC);
-                            dtSvc.capture = await random.capture(res, ( await fs.readFile( path.join( __dirname, "sampleNoFaces.jpg" ) ) ));
+                            dtSvc.capture = await random.capture(res, ( await random.images.files["sampleNoFaces.jpg"]() ));
                             await dtSvc.DetectChanges(dtOptions);
                         } catch (e) {
                             done(e);
@@ -271,6 +271,7 @@ describe("DetectionService", function () {
         });
 
         it("should emit ⚡DetectionRunning", function (done) {
+            this.timeout(10000);
             (async () => {
                 try {
                     const dtSvc = await random.detectionSvc();
@@ -351,7 +352,7 @@ describe("DetectionService", function () {
 
     describe("#StartDetection()", function () {
         it("should begin the detection cycle with the provided options", function (done) {
-            this.timeout(5000);
+            this.timeout(10000);
             (async () => { 
                 try {
                     const res = await random.appResources();
@@ -369,9 +370,11 @@ describe("DetectionService", function () {
 
                     dtSvc.DetectChanges = (options) => {
                         assert.deepEqual(opts, options);
-                        cycles++;
-                        if (cycles > 1)
+                        if (cycles > 1) {
                             clearInterval(dtSvc.detectionInterval);
+                        } else {
+                            cycles++;
+                        }
                     };
 
                     setTimeout(() => {
@@ -387,13 +390,14 @@ describe("DetectionService", function () {
         });
 
         it("should emit ⚡DetectionRunning", function (done) {
-            this.timeout(5000);
+            this.timeout(10000);
             (async () => { 
                 try {
                     const res = await random.appResources();
                     const dtSvc = await random.detectionSvc(res);
                     const opts = random.common.detectionOptions();
-                    opts.frequency = 100;
+                    opts.autostartFaces = false;
+                    opts.frequency = 1000;
                     opts.faces = [];
    
                     dtSvc.once("DetectionRunning", function (running) {

@@ -2,12 +2,10 @@ import AppResources from "./AppResources";
 import { flatten, sum } from "lodash";
 import {
     CascadeClassifier,
-    HAAR_FRONTALFACE_ALT2,
     Rect,
     Mat,
     VideoCapture,
-    INTER_CUBIC,
-    COLOR_BGR2GRAY
+    INTER_CUBIC
 } from "opencv4nodejs";
 
 /**
@@ -38,7 +36,7 @@ export class ImageBelowBrightnessThresholdError extends Error {
 }
 
 /**
- * Is thrown when 
+ * Is thrown when a non-existant classifier is specified
  */
 export class ClassifierDoesNotExistError extends Error {
     constructor(classifier: string) {
@@ -46,15 +44,29 @@ export class ClassifierDoesNotExistError extends Error {
     }
 }
 
+/**
+ * Contains methods to retrieve and process images from the capture source.
+ */
 export default class FaceCapture {
+    /**
+     * OpenCV capture source
+     */
     public captureSource: VideoCapture;
 
-    constructor(protected resources: AppResources, devicePort: number) {
+    /**
+     * 
+     * @param resources - Common application resources.
+     * @param devicePort - Device port to pass to OpenCV.
+     * @param classifierName - Cascade classifier passed to OpenCV.
+     * 
+     * @throws {ClassifierDoesNotExistError} if the classifier provided
+     */
+    constructor(protected resources: AppResources, devicePort: number, classifierName: string) {
         const { nconf } = resources;
+        
         this.captureSource = new VideoCapture(devicePort);
 
-        const classifierName = nconf.get("cascadeClassifier");
-        const classiferInfo = resources.nconf.get("cascadeClassifiers").filter((c: any) => c.key === classifierName)[0];
+        const classiferInfo = nconf.get("cascadeClassifiers").filter((c: any) => c.key === classifierName)[0];
 
         if (!classiferInfo) 
             throw new ClassifierDoesNotExistError(classifierName);
@@ -102,13 +114,20 @@ export default class FaceCapture {
         return await image.resizeAsync(nconf.get("imageSize:width"), nconf.get("imageSize:height"), INTER_CUBIC);
     }
     
-
+    /** 
+     * Retrieves the brightness of a provided image.
+     * Will return a number between 0 and 1.
+     */
     public async GetBrightness(image: Mat): Promise<number> {
         const data = image.getDataAsArray();
         
         return (sum(flatten(data)))/(data.length * data[0].length)/255;
     }
     
+    /**
+     * Applies historgram equalization
+     * @param image - Image to apply equalization to.
+     */
     public async StabilizeContrast(image: Mat): Promise<Mat> {
         return await image.equalizeHistAsync();
     }
@@ -117,7 +136,6 @@ export default class FaceCapture {
      * Operations that should be run each face image before adding it to the database.
      * 
      * @param image - The face image to preprocess.
-     * @returns - The preprocessed image.
      * 
      */
     public async PreprocessFace(image: Mat): Promise<Mat> {
@@ -139,7 +157,6 @@ export default class FaceCapture {
 
     /**
      * Takes a frame from the capture source.
-     * @returns - A single image from the capture source.
      */
     public async ImageFromCamera(): Promise<Mat> {
         return await this.captureSource.readAsync();

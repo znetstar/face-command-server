@@ -14,6 +14,7 @@ let { FaceCapture } = require("../lib");
 const { AppResources, DatabaseModels, DetectionService, CommandService, ConfigService, LogsService, FaceManagementService } = require("../lib");
 const { WinstonSilentLogger } = require("../lib/AppResources");
 const defaultConfig = require("../lib/DefaultConfiguration").default;
+const images = require("./sampleImages");
 Object.freeze(defaultConfig);
 
 temp.track();
@@ -24,6 +25,7 @@ async function tempFile() {
 
 const chance = Chance();
 const common = new Random();
+common.chance = chance;
 
 function sampleCommandTypeName() {
     return "SampleCommandType";
@@ -34,7 +36,7 @@ function sampleCommandTypePath() {
 }
 
 async function sampleImage() {
-    return await fs.readFile(path.join( __dirname, "sample.png" ));
+    return images.files['sample.jpg']();
 }
 
 function captureSource(image) {
@@ -138,5 +140,6 @@ module.exports = {
     sampleImage,
     tempFile,
     recOptions,
-    defaultConfig
+    defaultConfig,
+    images
 };

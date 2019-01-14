@@ -1,0 +1,7 @@
+This file contains license information for images in this folder.
+
+"sample.jpg" <http://bit.ly/2D1eHO6> is a work of the U.S. federal government and is in the public domain.
+"sampleEqualized.png" is a modified copy of "sample.jpg with hisogram equalization applied.
+"sampleDark.jpg" is a modified copy of "sample.jpg", with the darkness decreased.
+"sampleNoFaces.jpg" <http://bit.ly/2D3fSfK> is a photo published by NASA and is in the public domain.
+"sampleGroup.jpg" <http://bit.ly/2D34i4C> is a photo published on a Wikimedia site by Zeynel Cebeci. The photo is licensed under the CreativeCommons BY-SA 4.0.

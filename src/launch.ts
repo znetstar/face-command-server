@@ -8,19 +8,14 @@ import { Sequelize as ISequalize } from "sequelize";
 import * as Sequelize from "Sequelize";
 import yargs from "yargs"; 
 import * as fs from "fs-extra-promise";
-import { Server as RPCServer, WebSocketTransport, HTTPTransport, MsgPackSerializer } from "multi-rpc";
-import { Face, DetectionOptions, EigenFaceRecognizerOptions } from "face-command-common";
+import { Server as RPCServer, WebSocketTransport, MsgPackSerializer } from "multi-rpc";
+import { DetectionOptions, EigenFaceRecognizerOptions } from "face-command-common";
 
 import AppResources, { WinstonSilentLogger } from './AppResources';
 import default_configuration, { env_whitelist } from "./DefaultConfiguration";
 import DatabaseModels from "./DatabaseModels";
 import { default as expressApp } from "./WebServer";
-import RPCInterface, { default as setupRPC } from "./RPCInterface";
-import FaceManagementService from "./FaceManagementService";
-import DetectionService from "./DetectionService";
-import CommandService from "./CommandService";
-import ConfigService from "./ConfigService";
-import { default as FaceCapture } from "./FaceCapture";
+import RPCInterface from "./RPCInterface";
 
 /**
  * The contents of package.json
@@ -132,9 +127,7 @@ export async function Main(nconf?: Provider, sequelize?: ISequalize, logger?: IL
     /* Listen on RPC */
     logger.debug("Starting RPC server");
 
-    const { faceManagementService, detectionService, commandService, configService } = RPCInterface(resources, rpc);
-    
-    const httpServerConfig = nconf.get("httpServer");
+    const { detectionService } = RPCInterface(resources, rpc);
 
     let listenHTTP = () => {};
 
