@@ -70,9 +70,9 @@ describe("CommandService", function () {
     });
 
     describe("#RPC_AddCommand()", function () {
+        this.timeout(10000);
         it("should convert the face ids in the run conditions before adding the command. All properties sent to the server should be present in the resulting command", async function () {
             const resources = await random.appResources();
-            const { nconf } = resources;
 
             const faceSvc = await random.facesSvc(resources);
             const face = await faceSvc.AddFace((await random.sampleImage()), random.chance.string(), random.chance.bool(), false);

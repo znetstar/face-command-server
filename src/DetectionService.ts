@@ -240,7 +240,7 @@ export default class DetectionService extends DetectionServiceBase {
         
         const options = new DetectionOptions(inputOptions.frequency, eigenFaceRecognizerOptions, faces, inputOptions.autostartFaces);
 
-        return this.StartDetection(options);
+        await this.StartDetection(options);
     }
 
     /**

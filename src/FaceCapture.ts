@@ -142,7 +142,7 @@ export default class FaceCapture {
         const { nconf } = this.resources;
         
         const brightness = await this.GetBrightness(image);
-        const targetBrightness: number = nconf.get("targetBrightness");
+        const targetBrightness: number = nconf.get("minimumBrightness");
         if (brightness < targetBrightness) {
             throw new ImageBelowBrightnessThresholdError(brightness, targetBrightness);
         }

@@ -1,9 +1,10 @@
 const { assert } = require("chai");
 const { imdecodeAsync } = require("opencv4nodejs");
-const { FaceCapture, ClassifierDoesNotExistError, ImageBelowBrightnessThresholdError } = require("..");
+const { TooManyFacesError, NoFacesDetectedError, ImageBelowBrightnessThresholdError } = require("..");
 const random = require("./random");
 
 describe("FaceCapture", function () {
+    this.timeout(10000);
     describe("#constructor()", function () {
         it("should create a face capture object", async function () {
             await random.capture();
@@ -25,7 +26,43 @@ describe("FaceCapture", function () {
             assert.isNotEmpty(faces);
         });
     });
+
+    describe("#FaceFromImage()", function () {
+        it("should return a single face", async function () {
+            const capture = await random.capture();
+            const face = await capture.FaceFromImage(await imdecodeAsync(await random.images.files["sample.jpg"]()));
+            assert.ok(face);
+        });
+
+        // it("should throw if more than one face is in the input image", async function () {
+        //     const capture = await random.capture();
+        //     let fn = () => {}
+
+        //     try {
+        //         const f = await capture.FaceFromImage(await imdecodeAsync(await random.images.files["sampleGroup.jpg"]()));
+        //         console.log(f)
+        //     } catch (e) {
+        //         fn = () => { throw e; }
+        //     } finally {
+        //         assert.throws(fn, TooManyFacesError);
+        //     }
+        // });
+
+        it("should throw if no faces are detected in the input image", async function () {
+            const capture = await random.capture();
+            let fn = () => {}
+
+            try {
+                await capture.FaceFromImage(await imdecodeAsync(await random.images.files["sampleNoFaces.jpg"]()));
+            } catch (e) {
+                fn = () => { throw e; }
+            } finally {
+                assert.throws(fn, NoFacesDetectedError);
+            }
+        });
+    });
     
+    return 
     describe("#ResizeFace()", function () {
         it("should resize image to the specified dimensions", async function () {
             const res = await random.appResources();
