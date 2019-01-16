@@ -1,6 +1,6 @@
 {
   "name": "face-command-server",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Backend logic for Face Command <https://github.com/znetstar/face-command>",
   "main": "lib/index.js",
   "scripts": {

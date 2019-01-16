@@ -12,7 +12,7 @@ import { Server as RPCServer, WebSocketTransport, MsgPackSerializer } from "mult
 import { DetectionOptions, EigenFaceRecognizerOptions } from "face-command-common";
 
 import AppResources, { WinstonSilentLogger } from './AppResources';
-import default_configuration, { env_whitelist } from "./DefaultConfiguration";
+import defaultConfiguration, { env_whitelist } from "./DefaultConfiguration";
 import DatabaseModels from "./DatabaseModels";
 import { default as expressApp } from "./WebServer";
 import RPCInterface from "./RPCInterface";
@@ -38,6 +38,56 @@ function formatEnv(env: string): string {
 	return a.join('');
  }
 
+ /**
+  * Configures nconf instance.
+  * @param nconf - Nconf instance.
+  * @param defaults - Default config for nconf.
+  */
+export function ConfigureNconf(nconf: Provider, defaults: any = defaultConfiguration) {
+    const yargsInstance = yargs({})
+    .version(pkg.version)
+    .usage("face-command [arguments]")
+    .strict()
+    .option("logLevel", {
+        alias: "l",
+        describe: "Log level for application logging, can be: silent, silly, debug, verbose, info, warn, or error in order of verbosity. For example setting logLevel to info would not show logs from the lower levels."
+    })
+    .option("config", {
+        alias: "f",
+        describe: "Path to a json configuration to read from."
+    });
+
+    nconf
+        .argv(yargsInstance)
+        .env({
+            whitelist: env_whitelist.concat(env_whitelist.map(formatEnv)),
+            parseValues: true,
+            transform: (obj: any) => {
+                if (env_whitelist.includes(obj.key)) {
+                    if (obj.key.indexOf('_') !== -1) {
+                        obj.key = formatEnv(obj.key);
+                    }
+                }
+                return obj;
+            }
+        });
+
+    const configPath = nconf.get("config");
+
+    if (configPath && !fs.existsSync(configPath)) {
+        console.error(`Configuration file "${configPath}" set does not exist. Exiting`);
+        process.exit(1);
+        return;
+    } else if (configPath) {
+        nconf.file({ file: configPath });
+    } else {
+        nconf.use('memory');
+    }
+
+    nconf.defaults(defaults);
+    return nconf;
+}
+
 /**
  * This is the main entrypoint for the application. It will be called from the "bin/face-command-server" script.
  * It can be called from outside this package to start the server elsewhere.
@@ -53,48 +103,7 @@ export async function Main(nconf?: Provider, sequelize?: ISequalize, logger?: IL
    /* Configures application resources */ 
     if (!nconf) {
         nconf = new Provider();
-
-        const yargsInstance = yargs({})
-            .version(pkg.version)
-            .usage("face-command-server [arguments]")
-            .strict()
-            .option("logLevel", {
-                alias: "l",
-                describe: "Log level for application logging, can be: silent, silly, debug, verbose, info, warn, or error in order of verbosity. For example setting logLevel to info would not show logs from the lower levels."
-            })
-            .option("config", {
-                alias: "f",
-                describe: "Path to a json configuration to read from."
-            });
-
-        nconf
-            .argv(yargsInstance)
-            .env({
-                whitelist: env_whitelist.concat(env_whitelist.map(formatEnv)),
-                parseValues: true,
-                transform: (obj: any) => {
-                    if (env_whitelist.includes(obj.key)) {
-                        if (obj.key.indexOf('_') !== -1) {
-                            obj.key = formatEnv(obj.key);
-                        }
-                    }
-                    return obj;
-                }
-            });
-
-        const configPath = nconf.get("config");
-
-        if (configPath && !fs.existsSync(configPath)) {
-            console.error(`Configuration file "${configPath}" set does not exist. Exiting`);
-            process.exit(1);
-            return;
-        } else if (configPath) {
-            nconf.file({ file: configPath });
-        } else {
-            nconf.use('memory');
-        }
-
-        nconf.defaults(default_configuration);
+        ConfigureNconf(nconf);
     }
 
     const logLevel = nconf.get("logLevel");
@@ -102,6 +111,7 @@ export async function Main(nconf?: Provider, sequelize?: ISequalize, logger?: IL
     if (logger === null || !logLevel || logLevel === 'silent') {
         logger = WinstonSilentLogger;
     }
+
     else if (typeof(logger) === 'undefined') {
         logger = winston.createLogger({
             level: logLevel,
