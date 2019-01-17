@@ -7,4 +7,4 @@ export { default as AppResources } from "./AppResources";
 export { default as DatabaseModels } from "./DatabaseModels";
 export { CommandExecutionError } from "./Errors";
 export  { default as FaceCapture, NoFacesDetectedError, TooManyFacesError, ImageBelowBrightnessThresholdError, ClassifierDoesNotExistError } from "./FaceCapture";
-export { Main as Main } from "./launch";
+export { Main, ConfigureNconf } from "./launch";
