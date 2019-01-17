@@ -1,6 +1,6 @@
 # Changelog
 
-## [1.1.0] - 2019-01-16
+## [1.1.1] - 2019-01-16
 ### Changed
 - Major updates to face-command-web.
 
