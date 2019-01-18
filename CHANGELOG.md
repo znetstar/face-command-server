@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.1.2] - 2019-01-18
+### Changed
+- Updates to face-command-web.
+
 ## [1.1.1] - 2019-01-16
 ### Changed
 - Major updates to face-command-web.
