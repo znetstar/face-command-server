@@ -8,7 +8,9 @@ import { Sequelize as ISequalize } from "sequelize";
 import * as Sequelize from "Sequelize";
 import yargs from "yargs"; 
 import * as fs from "fs-extra-promise";
-import { Server as RPCServer, WebSocketTransport, MsgPackSerializer } from "multi-rpc";
+import { Server as RPCServer } from "multi-rpc-core";
+import { MsgPackSerializer } from "multi-rpc-msgpack-serializer";
+import { WebSocketTransport } from "multi-rpc-websocket-transport";
 import { DetectionOptions, EigenFaceRecognizerOptions } from "face-command-common";
 
 import AppResources, { WinstonSilentLogger } from './AppResources';

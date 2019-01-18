@@ -1,4 +1,5 @@
-import { Server as RPCServer, Notification } from "multi-rpc";
+import { Server as RPCServer } from "multi-rpc-core";
+import { Notification } from "multi-rpc-common";
 import { EventEmitter2 as EventEmitter } from "eventemitter2";
 import AppResources from "./AppResources";
 import FaceManagementService from "./FaceManagementService";

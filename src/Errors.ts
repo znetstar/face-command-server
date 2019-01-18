@@ -1,4 +1,4 @@
-import { ServerError } from "multi-rpc";
+import { ServerError } from "multi-rpc-common";
 
 export class CommandExecutionError extends ServerError {
     static get ERROR_CODE(): number { return -32032; }

@@ -1,7 +1,7 @@
 import { Provider } from "nconf";
 import * as winston from "winston";
 import { Logger as ILogger } from "winston";
-import { Server as RPCServer } from "multi-rpc";
+import { Server as RPCServer } from "multi-rpc-core";
 import { IAppResources } from "face-command-common";
 import DatabaseModels from "./DatabaseModels";
 

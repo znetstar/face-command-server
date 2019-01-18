@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.1.3] - 2019-01-18
+### Changed
+- Seperates the multi-rpc packages.
+
 ## [1.1.2] - 2019-01-18
 ### Changed
 - Updates to face-command-web.
